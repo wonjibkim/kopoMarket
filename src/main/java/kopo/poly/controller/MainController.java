@@ -28,7 +28,7 @@ import java.util.List;
 public class MainController {
     final private String FILE_UPLOAD_SAVE_PATH = "c:/upload"; // C:\\upload 폴더에 저장
 
-
+    //김원집은 바보다
     @Resource(name = "MainService")
     private IMainService mainService;
 
