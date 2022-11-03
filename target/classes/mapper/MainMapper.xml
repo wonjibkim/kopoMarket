@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "=//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kopo.poly.persistance.mapper.IMainMapper">
+
+
+    <insert id="InsertFood" parameterType="FoodDTO">
+        INSERT INTO food
+        (P_NAME,P_PRICE,P_SELL,P_INFO,P_PERIOD,P_CATEGORY,P_ENROLL,P_FILEPATH,P_FILENAME,P_DISCOUNT,P_ANCESTRY,P_WEIGHT)
+        VALUES
+            (#{p_name},#{p_price},#{p_sell},#{p_info},#{p_period},#{p_category},SYSDATE(),#{p_filePath},#{p_fileName},#{p_discount},#{p_ancestry},#{p_weight})
+    </insert>
+
+
+    <select id="getFoodList" parameterType="FoodDTO" resultType="FoodDTO">
+        SELECT * FROM food
+    </select>
+
+
+
+     <select id="foodsell_up" parameterType="FoodDTO" resultType="FoodDTO">
+        SELECT * FROM food
+    </select>
+
+
+
+    <update id="Food_update" parameterType="FoodDTO">
+        update food set  p_sell = #{p_sell}
+
+    </update>
+
+
+
+
+
+
+
+<!--    select문에 where절에 회원 pk넣기-->
+
+<!--    insert에 마트사용자 pk 넣어야됨-->
+
+
+
+</mapper>

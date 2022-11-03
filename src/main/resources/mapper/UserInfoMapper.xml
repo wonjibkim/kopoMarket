@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kopo.poly.persistance.mapper.IUserInfoMapper">
+
+    <insert id="insertUserInfo" parameterType="UserInfoDTO">
+        INSERT INTO USERINFO
+        (
+            EMAIL_USER,
+            PWD_USER,
+--             PWD2_USER,
+            NAME_USER,
+            GENDER,
+            AGE_USER,
+            TYPE_VEGANISM
+        )
+        VALUES (
+                   #{email_user},
+                   #{pwd_user},
+--                    #{pwd2_user},
+                   #{name_user},
+                   #{gender},
+                   #{age_user},
+                   #{type_veganism}
+               )
+    </insert>
+
+    <select id="getUserExists" parameterType="UserInfoDTO" resultType="UserInfoDTO">
+        SELECT
+            CASE
+                WHEN COUNT(1)
+                    THEN 'Y'
+                ELSE 'N'
+                END AS EXISTS_YN
+        FROM USERINFO WHERE EMAIL_USER=#{email_user}
+
+        /* SELECT DECODE 는 sql 쿼리 If문으로 mariaDB에서는 지원하지 않는다.'
+
+           WHERE 절을 안쓰면 테이블에는 항상 값이 있기떄문에 그냥 계속 안됨*/
+    </select>
+
+    <select parameterType="UserInfoDTO" id="getUserLoginCheck" resultType="UserInfoDTO">
+        SELECT EMAIL_USER, PWD_USER FROM USERINFO
+        WHERE EMAIL_USER  = #{email_user}
+        AND PWD_USER = #{pwd_user}
+    </select>
+
+</mapper>
