@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "=//mybatis.org//DTO Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "=//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kopo.poly.persistance.mapper.IMarketInfoMapper">
+
     <insert id="insertMarketInfo" parameterType="MarketInfoDTO">
-        INSERT INTO MARKETINFO
-        (
-            EMAIL_MARKET,
-            PWD_MARKET,
---            PWD2_MARKET,
-            NAME_MARKET,
-            NAME_BOSS,
-            ADDR1_MARKET,
-            ADDR2_MARKET,
-            CNUM_MARKET
+        INSERT INTO MARKETINFO(
+                               EMAIL_MARKET,
+                               PWD_MARKET,
+                               NAME_MARKET,
+                               NAME_BOSS,
+                               ADDR1_MARKET,
+                               ADDR2_MARKET,
+                               CNUM_MARKET
         )
         VALUES (
-                   #{email_market},
-                   #{pwd_market},
---                   #{pwd2_market},
-                   #{name_market},
-                   #{name_boss},
-                   #{addr1_market},
-                   #{addr2_market},
-                   #{cnum_market}
+                #{email_market},
+                #{pwd_market},
+                #{name_market},
+                #{name_boss},
+                #{addr1_market},
+                #{addr2_market},
+                #{cnum_market}
                )
     </insert>
-
     <!--ㅇㅣ메일로 회원가입 중복 방지하기 -->
     <select id="getMarketExists" parameterType="MarketInfoDTO" resultType="MarketInfoDTO">
         SELECT
@@ -40,6 +36,14 @@
 /*   decode 는 if문 mariadb지원안함    SELECT DECODE(COUNT(1,0, 'N',' Y') AS EXISTS_YN
         FROM MARKETINFO
         WHERE EMAIL_MARKET = #{email_market}*/
+    </select>
+
+
+    <!-- 로그인하기 위해 아이디와 비밀번호 일치하는지 확인하기 -->
+    <select id="getMarketLoginCheck" parameterType="MarketInfoDTO" resultType="MarketInfoDTO">
+        SELECT EMAIL_MARKET, PWD_MARKET FROM MARKETINFO
+        WHERE EMAIL_MARKET = #{email_market}
+        AND PWD_MARKET = #{pwd_market}
     </select>
 
 

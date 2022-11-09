@@ -17,13 +17,13 @@ String msg = CmmUtil.nvl((String)request.getAttribute("msg"));
 	top.location.href="/market/index";
     <%}else if(msg=="로그인 실패"){%>
     alert("<%=msg%>");
-    top.location.href="/signup/login";
+    top.location.href="/login/login";
     <%}else if(msg=="회원가입 되었습니다."){%>
     alert("<%=msg%>");
     top.location.href="/signup/login";
     <%}else if(msg=="이미 가입된 이메일 주소입니다."){%>
     alert("<%=msg%>");
-    top.location.href="/signup/signupUser";
+    top.location.href="/signup/SignupUser";
     <%}%>
 		
 </script>

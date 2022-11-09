@@ -8,7 +8,6 @@
         (
             EMAIL_USER,
             PWD_USER,
---             PWD2_USER,
             NAME_USER,
             GENDER,
             AGE_USER,
@@ -17,7 +16,6 @@
         VALUES (
                    #{email_user},
                    #{pwd_user},
---                    #{pwd2_user},
                    #{name_user},
                    #{gender},
                    #{age_user},
@@ -39,6 +37,9 @@
            WHERE 절을 안쓰면 테이블에는 항상 값이 있기떄문에 그냥 계속 안됨*/
     </select>
 
+
+
+    <!-- 로그인하기 위해 아이디와 비밀번호 일치하는지 확인 -->
     <select parameterType="UserInfoDTO" id="getUserLoginCheck" resultType="UserInfoDTO">
         SELECT EMAIL_USER, PWD_USER FROM USERINFO
         WHERE EMAIL_USER  = #{email_user}

@@ -53,10 +53,10 @@
                             </ul>
                         </div>
                         <div class="header__top__right__auth">
-                            <%if(session.getAttribute("SS_USER_ID") == null){%>
-                            <a href="/signup/login"><i class="fa fa-user"></i> Login</a>
+                            <%if((session.getAttribute("SS_EMAIL_USER") == null) && (session.getAttribute("SS_EMAIL_MARKET") == null)){%>
+                            <a href="/login/login"><i class="fa fa-user"></i> Login</a>
                             <%}else{%>
-                            <a href="/signup/MyPage"><i class="fa fa-user"></i> Mypage</a>
+                            <a href="/login/MyPage"><i class="fa fa-user"></i> Mypage</a>
                             <%}%>
                         </div>
                     </div>
