@@ -179,7 +179,7 @@
             </ul>
         </div>
         <div class="header__top__right__auth">
-            <a href="#"><i class="fa fa-user"></i> Login</a>
+            <a href="/login/login"><i class="fa fa-user"></i> Login</a>
         </div>
     </div>
     <nav class="humberger__menu__nav mobile-menu">
@@ -225,13 +225,14 @@
 <section class="contact-form section-padding3">
     <div class="login-page">
         <div class="form">
-            <h3>login</h3>
+            <h3>LOGIN USER</h3>
             <br>
-            <form class="login-form" method="post" action="getUserLoginCheck">
-                <input type="text" name="email" placeholder="username"/>
-                <input type="password" name="password" placeholder="password"/>
-                <button type="submit">login</button>
-                <p class="message">Not registered? <a href="SignupMain">Create an account</a></p>
+            <form class="login-form" method="post" action="/login/getUserLoginCheck" onsubmit="return doLoginUserCheck(this);">
+                <input type="text" name="email_user" placeholder="username"/>
+                <input type="password" name="pwd_user" placeholder="password"/>
+                <button type="submit" value="LOGIN">login</button>
+
+                <p class="message">Not registered? <a href="/signup/SignupMain">Create an account</a></p>
             </form>
         </div>
     </div>

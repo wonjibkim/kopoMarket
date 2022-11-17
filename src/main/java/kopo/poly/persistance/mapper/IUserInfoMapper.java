@@ -13,6 +13,7 @@ public interface IUserInfoMapper {
     // 유저 회원가입
     int insertUserInfo(UserInfoDTO uDTO) throws Exception;
 
+    //회원가입전 중복체크 ( DB 조회하기 )
     UserInfoDTO getUserExists(UserInfoDTO uDTO) throws Exception;
 }
 

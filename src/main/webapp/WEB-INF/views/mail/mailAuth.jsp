@@ -3,6 +3,9 @@
 <!DOCTYPE html>
 <html lang="zxx">
 
+
+<%--메일 인증 --%>
+
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Ogani Template">
@@ -36,18 +39,43 @@
 
 
     <style>
-        .single-box1 {
-            background: #FAAC58;
-        }
+        .signup2 {
 
-
-        .single-box2 {
-            background: green;
+            height: 600px;
+            text-align: center;
         }
+        .signupbutton {
+            color: #ffffff;
+            font-size: 12.8px;
+            background: #F8B600;
+            margin: 10px 10px 0px 0px;
+            padding: 0px 30px;
+            height: 30px;
+            width: 160px;
+            border-radius: 20px;
+        }
+        .signup2.nice-select
 
 
     </style>
 
+    <script type="text/javascript">
+        //회원가입 정보의 유효성 체크하기
+        function doRegUserCheck(f){
+            if (f.user_email.value === ""){
+                alert("아이디를 입력하세요");
+                f.user_email.focus();
+                return false;
+            }
+
+            if (f.pwd_user.value === ""){
+                alert("비밀번호를 입력하세요");
+                f.pwd_user.focus();
+                return false;
+            }
+
+        }
+    </script>
 
 
 </head>
@@ -62,7 +90,7 @@
 <div class="humberger__menu__overlay"></div>
 <div class="humberger__menu__wrapper">
     <div class="humberger__menu__logo">
-        <a href="#"><img src="/ogani-master/img/img/logo.png" alt=""></a>
+        <a href="#"><img src="/ogani-master/img/logo.png" alt=""></a>
     </div>
     <div class="humberger__menu__cart">
         <ul>
@@ -82,7 +110,7 @@
             </ul>
         </div>
         <div class="header__top__right__auth">
-            <a href="/login/login"><i class="fa fa-user"></i> Login</a>
+            <a href="/login/login"><i class="fa fa-user"></i> Login </a>
         </div>
     </div>
     <nav class="humberger__menu__nav mobile-menu">
@@ -121,30 +149,43 @@
 <%@include file="../includes/header.jsp"%>
 <!-- Header Section End -->
 
-<!--  section 합치는 부분 -->
-<!--    나중에 마트 로그인 , 유저 로그인 으로 나눠도 좋을것 같음  -->
+
+
+<!--  section 합치는 부분  들어갈 부분 -->
+
+
 <section class="pricing-table section-padding">
-    <div class="pricing-box section-padding3">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="single-box1 text-center mb-4 mb-md-0">
-                        <h3>마트 유저 </h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                        <a href="/login/loginMarket" class="template-btn">Login Market</a>
-                        <a href="SignupMarket" class="template-btn">Market signUp</a>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="single-box2 text-center">
-                        <h3>일반 회원 유저</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                        <a href="/login/loginUser" class="template-btn">Login User</a>
-                        <a href="SignupUser" class="template-btn">User SignUp</a>
-                    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-top text-center">
+                    <h2> 메일 인증받기  </h2>
+                    <p>Please verify your email first</p>
                 </div>
             </div>
         </div>
+
+        <!--            메일 인증 받기   -->
+        <div>
+            <div class="signup2">
+                <form name="f" method="post" action="/signup/SignupUser" onsubmit="return doRegUserCheck(this);">
+                    <%-- onfocus 클릭하면 바뀜 --%>
+                    <input type="email" name="email_user" placeholder="E-mail" onfocus="this.placeholder = ''" onblur="this.placeholder = 'E-Mail'" required><br>
+                        <button type="submit">인증번호 발송</button>
+                        <br><br>
+                </form>
+              <%--  <form>
+                    <input type="password" name="email_auth" placeholder="Certification Number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Cerfication Number'" required><br><br>
+
+                    <br><br>
+                    <button type="submit" class="signupbutton"> 회원가입 하러가기 </button>
+                </form>--%>
+            </div>
+        </div>
+
+
+
+
     </div>
 </section>
 <!-- Pricing Table End -->

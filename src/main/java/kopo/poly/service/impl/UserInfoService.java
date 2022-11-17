@@ -33,9 +33,11 @@ public class UserInfoService implements IUserInfoService {
         int res = 0;
 
         // 로그인을 위해 아이디와 비밀번호가 일치하는지 확인하기 위한 mapper 호출하기
+        UserInfoDTO rDTO = userInfoMapper.getUserLoginCheck(pDTO);
+
+
         log.info(pDTO.getEmail_user());
         log.info(pDTO.getPwd_user());
-        UserInfoDTO rDTO = userInfoMapper.getUserLoginCheck(pDTO);
         log.info(String.valueOf(userInfoMapper.getUserLoginCheck(pDTO)));
         log.info(String.valueOf(rDTO));
 
@@ -70,6 +72,13 @@ public class UserInfoService implements IUserInfoService {
         return res;
     }
 
+
+    /**
+     *
+     * 회원가입 !!!!!
+     *
+     *
+     * */
     @Override
     public int insertUserInfo(UserInfoDTO uDTO) throws Exception {
         //회원가입 성공 : 1,
@@ -93,7 +102,10 @@ public class UserInfoService implements IUserInfoService {
         //중복된 회원정보가 있는경우, 결과값을 2로 변경하고, 더 이상 작업을 진행하지 않음
         if (CmmUtil.nvl(rDTO.getExists_yn()).equals("Y")){
             res = 2;
+
+            //회원가입이 중복이 아니므로 회원가입 진행함
         }else {
+            log.info(uDTO.getName_user());
             int success = userInfoMapper.insertUserInfo(uDTO);
             //db에 데이터가 등록되없다면
             if(success > 0){

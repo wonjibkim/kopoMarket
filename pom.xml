@@ -74,9 +74,7 @@
             <artifactId>jsoup</artifactId>
             <version>1.15.3</version>
         </dependency>
-
-
-<!--        QR코드 생성 인식-->
+        QR코드 생성 인식-->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
@@ -99,8 +97,12 @@
             <artifactId>javase</artifactId>
             <version>3.5.0</version>
         </dependency>
-    </dependencies>
-
+    <!-- 메일 발송을 위한 외부라이브러리-->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+</dependencies>
     <build>
         <plugins>
             <plugin>
