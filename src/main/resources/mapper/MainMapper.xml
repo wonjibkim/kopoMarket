@@ -5,30 +5,28 @@
 <mapper namespace="kopo.poly.persistance.mapper.IMainMapper">
 
 
-<!--    <insert id="InsertFood" parameterType="FoodDTO">-->
-<!--        INSERT INTO food-->
-<!--        (P_NAME,P_PRICE,P_SELL,P_INFO,P_PERIOD,P_CATEGORY,P_ENROLL,P_FILEPATH,P_FILENAME,P_DISCOUNT,P_ANCESTRY,P_WEIGHT)-->
-<!--        VALUES-->
-<!--            (#{p_name},#{p_price},#{p_sell},#{p_info},#{p_period},#{p_category},SYSDATE(),#{p_filePath},#{p_fileName},#{p_discount},#{p_ancestry},#{p_weight})-->
-<!--    </insert>-->
+    <insert id="InsertFood" parameterType="FoodDTO">
+        INSERT INTO food
+        (P_NAME,P_PRICE,P_SELL,P_INFO,P_PERIOD,P_CATEGORY,P_ENROLL,P_FILEPATH,P_FILENAME,P_DISCOUNT,P_ANCESTRY,P_WEIGHT)
+        VALUES
+            (#{p_name},#{p_price},#{p_sell},#{p_info},#{p_period},#{p_category},SYSDATE(),#{p_filePath},#{p_fileName},#{p_discount},#{p_ancestry},#{p_weight})
+    </insert>
 
 
-<!--    <select id="getFoodList" parameterType="FoodDTO" resultType="FoodDTO">-->
-<!--        SELECT * FROM food-->
-<!--    </select>-->
+    <select id="getFoodList" parameterType="FoodDTO" resultType="FoodDTO">
+        SELECT * FROM food
+    </select>
 
+    <update id="Food_update" parameterType="FoodDTO">
+        update food set  p_sell = #{p_sell}
 
+    </update>
 
-<!--     <select id="foodsell_up" parameterType="FoodDTO" resultType="FoodDTO">-->
-<!--        SELECT * FROM food-->
-<!--    </select>-->
-
-
-
-<!--    <update id="Food_update" parameterType="FoodDTO">-->
-<!--        update food set  p_sell = #{p_sell}-->
-
-<!--    </update>-->
+    <select id="getFoodInfo" resultType="FoodDTO">
+        SELECT *
+        FROM FOOD
+        WHERE P_NUM = #{p_num}
+    </select>
 
 
 

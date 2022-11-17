@@ -228,7 +228,8 @@ public class LoginController {
              */
 
             // 로그인을 위해 아이디와 비밀번호가 일치하는지 확인하기 위한 userInfoService 호출하기
-            res = userInfoService.getUserLoginCheck(pDTO);
+            UserInfoDTO rDto = userInfoService.getUserLoginCheck(pDTO);
+            res= rDto.getRes();
 
             log.info("res : " + res);
             /*
@@ -245,7 +246,7 @@ public class LoginController {
              * 세션은 톰켓의 메모리에 저장되기 때문에 url마다 전달하는게 필요하지 않고,
              * 그냥 메모리에서 부르면 되기 때문에 jsp, controller에서 쉽게 불러서 쓸수 있다.
              * */
-            if (res == 1) { //로그인 성공
+            if (res==1) { //로그인 성공
 
                 /*
                  * 세션에 회원아이디 저장하기, 추후 로그인여부를 체크하기 위해 세션에 값이 존재하는지 체크한다.
@@ -253,8 +254,8 @@ public class LoginController {
                  *
                  * Session 단어에서 SS를 가져온 것이다.
                  */
-                session.setAttribute("SS_EMAIL_USER", email_user);
-                log.info((String) session.getAttribute("SS_EMAIL_USER"));
+                session.setAttribute("seq", rDto.getUser_seq());
+                log.info((String) session.getAttribute("seq"));
                 msg ="로그인 성공";
                 url="/market/index";
             }else{

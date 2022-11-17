@@ -89,5 +89,46 @@
         FROM MARKETPASING
     </select>
 
+<!--    카트 품목이 있는지 확인하는 쿼리
+카트에 담아 있으면 1 아니면 0 -->
+    <select id="SelectCountInCart" resultType="cartDTO" parameterType="cartDTO">
+
+        SELECT
+            CASE
+                WHEN COUNT(1)
+                    THEN 'Y'
+                ELSE 'N'
+                END AS EXISTS_YN
+        FROM CART WHERE USER_SEQ=#{user_seq} AND FOOD_NUM=#{food_num}
+    </select>
+
+
+
+
+<!--    카트 추가 쿼리-->
+    <insert id="InsertFoodInCart" parameterType="cartDTO">
+
+    INSERT INTO CART
+        (
+
+         CART_COUNT,
+         CART_DATE,
+         USER_SEQ,
+         FOOD_NUM
+        )
+        VALUES (
+
+                #{cart_count},
+                SYSDATE(),
+                #{user_seq},
+                #{food_num}
+               )
+
+
+
+    </insert>
+
+
+
 
 </mapper>

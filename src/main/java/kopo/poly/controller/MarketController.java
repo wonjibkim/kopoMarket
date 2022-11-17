@@ -554,19 +554,68 @@ public class MarketController {
         return "/market/Sccan";
     }
 
-    @GetMapping("qr")
-    public Object createQr(@RequestParam String url) throws WriterException, IOException {
-        int width = 200;
-        int height = 200;
-        BitMatrix matrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, width, height);
 
-        try (ByteArrayOutputStream out = new ByteArrayOutputStream();) {
-            MatrixToImageWriter.writeToStream(matrix, "PNG", out);
-            return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_PNG)
-                    .body(out.toByteArray());
+    @PostMapping(value = "cart_add") // 상품 카트 추가
+    public String cart_add(HttpServletRequest request,HttpSession session,ModelMap model ) throws Exception{
+        log.info(getClass().getName() + "cart_add start");
+
+        String url = ""; // 상황에 따라 url 이동
+        String msg= ""; // 상황에 따라 alert창 띄우기
+        CartDTO cDTO = null;
+
+        try {
+            String food_num = CmmUtil.nvl(request.getParameter("food_num"));
+            String cart_count = CmmUtil.nvl(request.getParameter("cart_count"));
+            String user_seq = CmmUtil.nvl((String) session.getAttribute("seq"));
+
+            log.info("food_num" + food_num);
+            log.info("cart_count" + cart_count);
+            log.info("user_seq" + user_seq);
+
+
+             cDTO = new CartDTO();
+
+            cDTO.setUser_seq(Integer.parseInt(user_seq));
+            cDTO.setCart_count(Integer.parseInt(cart_count));
+            cDTO.setFood_num(Integer.parseInt(food_num));
+
+            int res = marketService.InsertFoodInCart(cDTO);
+            log.info("카트 결과 res" + res);
+
+            if (res == 1){
+                msg ="카트 담기에 성공하였습니다";
+                url = "";
+
+
+            }else if (res == 2){
+                msg = "이미 담겨져 있는 품목입니다";
+                url = "";
+            }else {
+                msg="오류로 인해서 카트에 담기에 실패하였습니다";
+            }
+
+        }catch (Exception e){ // 실패시 나오는 에러메세지
+            msg=  "실패하였습니다. " + e;
+            url= "/signup/SingupUser";
+            log.info(e.toString());
+            e.printStackTrace();
+
+        }finally {
+            log.info(getClass().getName() + "cart_add end");
+
+            model.addAttribute("msg",msg);
+            model.addAttribute("url",url);
+
+            cDTO = null;
+
+
         }
+
+
+        return "/redirect";
     }
+
+
 
 
 

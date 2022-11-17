@@ -4,6 +4,7 @@ package kopo.poly.service.impl;
 import kopo.poly.dto.*;
 import kopo.poly.persistance.mapper.IMarketMapper;
 import kopo.poly.service.IMarketService;
+import kopo.poly.util.CmmUtil;
 import kopo.poly.util.XmlPasingUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -152,7 +153,38 @@ public class MarketService implements IMarketService {
                 }
         }
 
+        @Override
+        public int InsertFoodInCart(CartDTO cDTO) throws Exception {
 
+                int res = 0;
+
+                if(cDTO == null){
+                        cDTO = new CartDTO();
+                        log.info("cDTO가 널이어서 메모리에 강제로 올림");
+                } //널처리
+
+                CartDTO rDTO = marketMapper.SelectCountInCart(cDTO); // 중복체크
+
+                if (rDTO == null){
+                        rDTO = new CartDTO();
+                }
+
+                if (CmmUtil.nvl(rDTO.getExists_yn()).equals("Y")){
+                        res = 2;
+                }else {
+                        log.info("user_seq : "+cDTO.getUser_seq());
+                        int success = marketMapper.InsertFoodInCart(cDTO);
+
+                        if(success > 0){
+                                res =1;
+                        }else {
+                                res = 0;
+                        }
+                }
+
+
+                return res;
+        }
 
 
 }

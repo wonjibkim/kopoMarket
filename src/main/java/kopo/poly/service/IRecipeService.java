@@ -10,7 +10,11 @@ public interface IRecipeService {
 	int collectRecipe() throws Exception;
 
 	// 수집된 내용을 조회하기
-	List<RecipeDTO> getRecipeInfo(RecipeDTO pDTO) throws Exception;
+	List<RecipeDTO> getRecipeName() throws Exception;
+
+	List<RecipeDTO> getRecipe(String name) throws Exception;
+
+	public List<RecipeDTO> getRecipeInfo(String name) throws Exception;
 
 }
 

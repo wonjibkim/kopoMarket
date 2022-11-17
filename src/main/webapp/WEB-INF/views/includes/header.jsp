@@ -53,8 +53,8 @@
                             </ul>
                         </div>
                         <div class="header__top__right__auth">
-                            <%if((session.getAttribute("SS_EMAIL_USER") == null) && (session.getAttribute("SS_EMAIL_MARKET") == null)){%>
-                            <a href="/login/login"><i class="fa fa-user"></i> Login</a>
+                            <%if((session.getAttribute("seq") == null) && (session.getAttribute("SS_EMAIL_MARKET") == null)){%>
+                            <a href="/login/loginUser"><i class="fa fa-user"></i> Login</a>
                             <%}else{%>
                             <a href="/login/MyPage"><i class="fa fa-user"></i> Mypage</a>
                             <%}%>

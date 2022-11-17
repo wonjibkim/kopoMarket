@@ -27,7 +27,7 @@ public class UserInfoService implements IUserInfoService {
      * @return 로그인된 회원아이디 정보
      */
     @Override
-    public int getUserLoginCheck(UserInfoDTO pDTO) throws Exception {
+    public UserInfoDTO getUserLoginCheck(UserInfoDTO pDTO) throws Exception {
 
         // 로그인 성공 : 1, 실패 : 0
         int res = 0;
@@ -60,7 +60,7 @@ public class UserInfoService implements IUserInfoService {
          * 0보다 크다면, 글자가 존재하는 것이기 때문에 값이 존재한다.
          */
         if (CmmUtil.nvl(rDTO.getEmail_user()).length() > 0) {
-            res = 1;
+            rDTO.setRes(1);
         }
 
         /*
@@ -69,7 +69,7 @@ public class UserInfoService implements IUserInfoService {
          * #######################################################
          */
 
-        return res;
+        return rDTO;
     }
 
 

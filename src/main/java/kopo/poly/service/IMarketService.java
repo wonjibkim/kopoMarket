@@ -28,5 +28,6 @@ public interface IMarketService {
     void maketInsertInfo() throws Exception; // api 가져오기 service
 
 
+    int InsertFoodInCart(CartDTO cDTO) throws Exception; // 카트에 담겨있는지 확인하기
 
 }
