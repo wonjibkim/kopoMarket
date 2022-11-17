@@ -2,6 +2,7 @@ package kopo.poly.service.impl;
 
 
 import kopo.poly.dto.FoodDTO;
+import kopo.poly.dto.NoticeDTO;
 import kopo.poly.persistance.mapper.IMainMapper;
 import kopo.poly.service.IMainService;
 import lombok.RequiredArgsConstructor;
@@ -19,34 +20,33 @@ public class MainService implements IMainService {
         private final IMainMapper mainMapper;
 
 
+//
+//        @Transactional
+//        @Override
+//        public void InsertFood(FoodDTO fDTO) throws Exception {
+//
+//                log.info(this.getClass().getName() + "InsertFood start!");
+//                log.info("name : "+fDTO.getP_name());
+//                mainMapper.InsertFood(fDTO);
+//
+//                log.info(this.getClass().getName() + "InsertFood end");
+//
+//        }
+//
+//        @Override
+//        public List<FoodDTO> getFoodList() {
+//
+//                List<FoodDTO>rList =mainMapper.getFoodList();
+//
+//                return rList;
+//        }
 
-        @Transactional
-        @Override
-        public void InsertFood(FoodDTO fDTO) throws Exception {
+//        @Override
+//        public NoticeDTO getMainsell(NoticeDTO pDTO) throws Exception {
+//                return mainMapper.getMainsell;
+//        }
 
-                log.info(this.getClass().getName() + "InsertFood start!");
-                log.info("name : "+fDTO.getP_name());
-                mainMapper.InsertFood(fDTO);
 
-                log.info(this.getClass().getName() + "InsertFood end");
-
-        }
-
-        @Override
-        public List<FoodDTO> getFoodList() {
-
-                List<FoodDTO>rList =mainMapper.getFoodList();
-
-                return rList;
-        }
-
-        @Override
-        public List<FoodDTO> foodsell_up() {
-
-                List<FoodDTO>rList =mainMapper.getFoodList();
-
-                return rList;
-        }
 
 
 }

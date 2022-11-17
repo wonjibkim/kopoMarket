@@ -30,7 +30,7 @@
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="footer__about">
                     <div class="footer__about__logo">
-                        <a href="/ogani-master/index.html"><img src="/ogani-master/img/img/logo.png" alt=""></a>
+                        <a href="/ogani-master/index.html"><img src="/ogani-master/img/logo.png" alt=""></a>
                     </div>
                     <ul>
                         <li>Address: 60-49 Road 11378 New York</li>

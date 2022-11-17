@@ -15,7 +15,7 @@ public class MarketInfoDTO {
     private String name_market; //마트이름
     private String name_boss;   //대표자 이름
     private String addr1_market;//마켓주소1
-    private String addr2_market;//마켓주소2
+    private String addr2_market;//마켓주소2 상세주소
     private String cnum_market; //마켓대표번
 
     /*회원가입시, 중복가입을 방지위해 사용할 변수

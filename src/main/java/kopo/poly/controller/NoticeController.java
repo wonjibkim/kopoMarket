@@ -113,6 +113,7 @@ public class NoticeController {
 
         try {
 
+            log.info("실행 좀 되라");
             String nSeq = CmmUtil.nvl(request.getParameter("nSeq"));
 
             log.info("nSeq : " + nSeq);

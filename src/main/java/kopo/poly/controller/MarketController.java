@@ -1,0 +1,576 @@
+package kopo.poly.controller;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import kopo.poly.dto.*;
+import kopo.poly.service.IMarketService;
+import kopo.poly.util.CmmUtil;
+import kopo.poly.util.DateUtil;
+import kopo.poly.util.FileUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import sun.java2d.cmm.kcms.CMM;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+@Slf4j
+@Controller
+@RequestMapping(value = "market")
+public class MarketController {
+
+    final private String FILE_UPLOAD_SAVE_PATH = "c:/JAVAproject/market22/kopoMarket/src/main/resources"; // C:\\upload 폴더에 저장
+
+    @Resource(name = "MarketService")
+    private IMarketService marketService;
+
+
+    /**
+     * !!!!!!!!!!!!!!!!!!! 음식등록 !!!!!!!!!!!!!!!!
+     */
+    @GetMapping(value = "/FoodReg")
+    public String FoodReg() {
+        log.info(this.getClass().getName() + "FoodReg start");
+        log.info(this.getClass().getName() + "FoodReg end");
+
+        return "/market/FoodReg";
+    }
+
+    /**
+     * !!!!!!!!!!!!!!!!!!! 음식등록 실행 !!!!!!!!!!!!!!!!
+     */
+    @PostMapping(value = "/FoodInsert")
+    public String FoodInsert(HttpServletRequest request, HttpSession session, ModelMap model, @RequestParam(value = "fileUpload") MultipartFile mf) {
+        log.info(this.getClass().getName() + "FoodInsert start");
+
+        String msg = "";
+        String url = "/market/FoodReg";
+
+
+        try {
+//           마트 사용자 pk 정보 세션으로 받기
+//            String user_id = CmmUtil.nvl((String) session.getAttribute("SESSION_USER_ID"));
+
+
+            /////////////////////////////////////////////////////////////////////////////////
+
+            // mf.getOriginalFilename()은 웹페이지에서 클라이언트가 보낸 File의 이름을 가져온다.
+            // Ex) 클라이언트가 사과.jpg를 업로드하면 mf.getOriginalFilename() = 사과.jpg
+            String originalFileName = mf.getOriginalFilename();
+
+            // 파일 확장자 가져오기(파일 확장자를 포함한 전체 이름(myimage.jpg)에서 뒤쪽부터 .이 존재하는 위치 찾기
+            String ext = originalFileName.substring(originalFileName.lastIndexOf(".") + 1,
+                    originalFileName.length()).toLowerCase();
+
+            // 시분초로 파일명을 만들기 때문에 파일명이 안겹친다.
+            // EX) 162235_jpg
+            String saveFileName = DateUtil.getDateTime("HHmmss") + "." + ext;
+
+            // 웹서버에 업로드한 파일 저장하는 물리적 경로
+            // c 밑에 upload 밑에 새로 생기는 폴더의 경로 저장
+            // EX) C:/upload/2022_10_07
+            String saveFilePath = FileUtil.mkdirForDate(FILE_UPLOAD_SAVE_PATH);
+
+
+            // EX) C:/upload/2022_10_07/162235_jpg
+            String fullFileInfo = saveFilePath + "/" + saveFileName;
+
+
+            // 업로드 되는 파일을 서버에 저장
+            mf.transferTo(new File(fullFileInfo));
+
+            String p_name = CmmUtil.nvl(request.getParameter("p_name"));
+            String p_price = CmmUtil.nvl(request.getParameter("p_price"));
+            String p_sell = CmmUtil.nvl(request.getParameter("p_sell"));
+            String p_info = CmmUtil.nvl(request.getParameter("p_info"));
+            String p_period = CmmUtil.nvl(request.getParameter("p_period"));
+            String p_category = CmmUtil.nvl(request.getParameter("p_category"));
+
+            String p_discount = CmmUtil.nvl(request.getParameter("p_discount"));
+            String p_ancestry = CmmUtil.nvl(request.getParameter("p_ancestry"));
+            String p_weight = CmmUtil.nvl(request.getParameter("p_weight"));
+
+
+            log.info("p_name : " + p_name);
+            log.info("p_price : " + p_price);
+            log.info("p_sell : " + p_sell);
+            log.info("p_info : " + p_info);
+            log.info("p_period : " + p_period);
+            log.info("p_category : " + p_category);
+
+            log.info("p_discount : " + p_discount);
+            log.info("p_ancestry : " + p_ancestry);
+            log.info("p_weight : " + p_weight);
+
+            // FoodDTO 객체 생성
+            FoodDTO fDTO = new FoodDTO();
+
+            fDTO.setP_name(p_name);
+            fDTO.setP_price(p_price);
+            fDTO.setP_sell(p_sell);
+            fDTO.setP_info(p_info);
+            fDTO.setP_period(p_period);
+            fDTO.setP_category(p_category);
+            fDTO.setP_fileName(saveFileName); // 저장되는 파일명
+            fDTO.setP_filePath(saveFilePath);
+
+            fDTO.setP_discount(p_discount);
+            fDTO.setP_ancestry(p_ancestry);
+            fDTO.setP_weight(p_weight);
+
+            //////////////////////////////////////////////////////
+
+            if (fDTO == null) {
+                fDTO = new FoodDTO();
+                log.info("fDTO is null !!");
+            }
+
+            // 정상적으로 값이 생성되었는지 로그 찍어서 확인
+            log.info("p_name : " + fDTO.getP_name());
+            log.info("p_price : " + fDTO.getP_price());
+            log.info("p_sell : " + fDTO.getP_sell());
+            log.info("p_info : " + fDTO.getP_info());
+            log.info("p_period : " + fDTO.getP_period());
+            log.info("p_category : " + fDTO.getP_category());
+            log.info("p_saveFileName : " + saveFileName);
+            log.info("p_saveFilePath : " + saveFilePath);
+
+            log.info("p_discount : " + p_discount);
+            log.info("p_ancestry : " + p_ancestry);
+            log.info("p_weight : " + p_weight);
+
+            marketService.FoodInsert(fDTO);
+
+
+            msg = "등록되었습니다.";
+
+
+        } catch (Exception e) {
+
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            log.info(this.getClass().getName() + ".FoodInsert end!");
+
+
+            model.addAttribute("msg", msg);
+            model.addAttribute("url", url);
+
+        }
+
+
+        return "/redirect";
+    }
+
+
+    /**
+     * !!!!!!!!!!!!!!!!!!! 판매자 재고 게시판 !!!!!!!!!!!!!!!!
+     */
+    @GetMapping(value = "FoodList")
+    public String sell_main(Model model) throws Exception {
+
+        log.info(getClass().getName() + "FoodList start");
+
+        List<FoodDTO> rList = marketService.FoodList();
+
+        if (rList == null) {
+            rList = new ArrayList<>();
+            log.info("값이 들어오지 않음");
+        }
+
+        log.info(getClass().getName() + "FoodList end");
+
+        model.addAttribute("rList", rList);
+
+        return "/market/FoodList";
+    }
+
+
+    /**
+     * !!!!!!!!!!!!!!!!!!! 물품 상세보기 + 수정가능한 페이지  !!!!!!!!!!!!!!!!
+     */
+    @GetMapping(value = "/FoodEditInfo") // 리스트 수정보기
+    public String FoodEditInfo(HttpServletRequest request, ModelMap model)throws Exception {
+
+        log.info(this.getClass().getName() + ".FoodEditInfo start!");
+
+            String p_num = CmmUtil.nvl(request.getParameter("p_num")); //물품 pk받기
+
+            log.info("p_num : " + p_num);
+
+            FoodDTO pDTO = new FoodDTO();
+            pDTO.setP_num(p_num);
+
+            FoodDTO rDTO = marketService.FoodEditInfo(pDTO);
+
+            if (rDTO == null) {
+                rDTO = new FoodDTO();
+
+            }
+
+            model.addAttribute("rDTO", rDTO);
+
+        log.info(this.getClass().getName() + "FoodEditInfo end!");
+
+        return "/market/FoodEditInfo";
+
+
+    }
+
+
+    /**
+     * !!!!!!!!!!!!!!!!!!! 물품 수정하기 !!!!!!!!!!!!!!!
+     */
+    @PostMapping(value = "/FoodEdit")
+    public String foodUp(HttpServletRequest request, HttpSession session, ModelMap model, @RequestParam(value = "fileUpload") MultipartFile mf) {
+        log.info(this.getClass().getName() + "FoodEdit start");
+
+        String msg = "";
+        String url = "/market/FoodList";
+
+
+        try {
+//           마트 사용자 pk 정보 세션으로 받기
+//            String user_id = CmmUtil.nvl((String) session.getAttribute("SESSION_USER_ID"));
+
+
+            /////////////////////////////////////////////////////////////////////////////////
+
+            // mf.getOriginalFilename()은 웹페이지에서 클라이언트가 보낸 File의 이름을 가져온다.
+            // Ex) 클라이언트가 사과.jpg를 업로드하면 mf.getOriginalFilename() = 사과.jpg
+            String originalFileName = mf.getOriginalFilename();
+
+            // 파일 확장자 가져오기(파일 확장자를 포함한 전체 이름(myimage.jpg)에서 뒤쪽부터 .이 존재하는 위치 찾기
+            String ext = originalFileName.substring(originalFileName.lastIndexOf(".") + 1,
+                    originalFileName.length()).toLowerCase();
+
+            // 시분초로 파일명을 만들기 때문에 파일명이 안겹친다.
+            // EX) 162235_jpg
+            String saveFileName = DateUtil.getDateTime("HHmmss") + "." + ext;
+
+            // 웹서버에 업로드한 파일 저장하는 물리적 경로
+            // c 밑에 upload 밑에 새로 생기는 폴더의 경로 저장
+            // EX) C:/upload/2022_10_07
+            String saveFilePath = FileUtil.mkdirForDate(FILE_UPLOAD_SAVE_PATH);
+
+
+            // EX) C:/upload/2022_10_07/162235_jpg
+            String fullFileInfo = saveFilePath + "/" + saveFileName;
+
+
+            // 업로드 되는 파일을 서버에 저장
+            mf.transferTo(new File(fullFileInfo));
+
+
+
+            //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+            String p_num = CmmUtil.nvl(request.getParameter("p_num")); //물품 pk받기
+
+            String p_name = CmmUtil.nvl(request.getParameter("p_name"));
+            String p_price = CmmUtil.nvl(request.getParameter("p_price"));
+            String p_sell = CmmUtil.nvl(request.getParameter("p_sell"));
+            String p_info = CmmUtil.nvl(request.getParameter("p_info"));
+            String p_period = CmmUtil.nvl(request.getParameter("p_period"));
+            String p_category = CmmUtil.nvl(request.getParameter("p_category"));
+
+            String p_discount = CmmUtil.nvl(request.getParameter("p_discount"));
+            String p_ancestry = CmmUtil.nvl(request.getParameter("p_ancestry"));
+            String p_weight = CmmUtil.nvl(request.getParameter("p_weight"));
+
+
+            log.info("p_name : " + p_name);
+            log.info("p_price : " + p_price);
+            log.info("p_sell : " + p_sell);
+            log.info("p_info : " + p_info);
+            log.info("p_period : " + p_period);
+            log.info("p_category : " + p_category);
+
+            log.info("p_discount : " + p_discount);
+            log.info("p_ancestry : " + p_ancestry);
+            log.info("p_weight : " + p_weight);
+
+            // FoodDTO 객체 생성
+            FoodDTO fDTO = new FoodDTO();
+
+            fDTO.setP_num(p_num);
+            fDTO.setP_name(p_name);
+            fDTO.setP_price(p_price);
+            fDTO.setP_sell(p_sell);
+            fDTO.setP_info(p_info);
+            fDTO.setP_period(p_period);
+            fDTO.setP_category(p_category);
+            fDTO.setP_fileName(saveFileName); // 저장되는 파일명
+            fDTO.setP_filePath(saveFilePath);
+
+            fDTO.setP_discount(p_discount);
+            fDTO.setP_ancestry(p_ancestry);
+            fDTO.setP_weight(p_weight);
+
+            fDTO.setP_num(p_num);
+
+            //////////////////////////////////////////////////////
+
+            if (fDTO == null) {
+                fDTO = new FoodDTO();
+                log.info("fDTO is null !!");
+            }
+
+            // 정상적으로 값이 생성되었는지 로그 찍어서 확인
+            log.info("p_num : " + p_num);
+            log.info("p_name : " + fDTO.getP_name());
+            log.info("p_price : " + fDTO.getP_price());
+            log.info("p_sell : " + fDTO.getP_sell());
+            log.info("p_info : " + fDTO.getP_info());
+            log.info("p_period : " + fDTO.getP_period());
+            log.info("p_category : " + fDTO.getP_category());
+            log.info("p_saveFileName : " + saveFileName);
+            log.info("p_saveFilePath : " + saveFilePath);
+
+            log.info("p_discount : " + p_discount);
+            log.info("p_ancestry : " + p_ancestry);
+            log.info("p_weight : " + p_weight);
+
+            marketService.foodUp(fDTO);
+
+
+            msg = "수정되었습니다.";
+
+
+        } catch (Exception e) {
+
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            log.info(this.getClass().getName() + ".NoticeInsert end!");
+
+
+            model.addAttribute("msg", msg);
+            model.addAttribute("url", url);
+
+        }
+
+        log.info(this.getClass().getName() + "FoodEdit end");
+
+        return "/redirect";
+    }
+
+
+    /**
+     * !!!!!!!!!!!!!!!!!!! 물품 삭제하기 !!!!!!!!!!!!!!!
+     */
+    @PostMapping(value = "FoodDelete")
+    @ResponseBody
+    public List<FoodDTO> FoodDelete(HttpServletRequest request, ModelMap model) throws Exception {
+
+        log.info(this.getClass().getName() + ".FoodDelete start!");
+
+        String msg = "";
+        String url = "";
+
+        String p_num = CmmUtil.nvl(request.getParameter("p_num")); // 글번호(PK)
+
+        log.info("Pk키  : " + p_num);
+
+        FoodDTO pDTO = new FoodDTO();
+
+        pDTO.setP_num(p_num);
+
+        marketService.FoodDelete(pDTO);
+
+        List<FoodDTO> fList = marketService.FoodList();
+
+        if (fList == null) {
+            fList = new ArrayList<>();
+        }
+
+        return fList;
+    }
+
+
+
+
+
+
+
+
+
+    //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ11/08
+
+
+    @GetMapping(value = "FoodListShelf") // 유통기한 지난 것들 게시판
+    public String FoodListShelf(Model model) throws Exception {
+
+        log.info(this.getClass().getName() + "FoodListShelf start");
+
+        List<FoodDTO> rList = marketService.FoodListShelf();
+
+        if (rList == null) {
+            rList = new ArrayList<>();
+            log.info("값이 들어오지 않음");
+        }
+
+        log.info(this.getClass().getName() + "FoodListShelf end");
+
+        model.addAttribute("rList", rList);
+
+        return "/market/FoodList_shelf";
+    }
+
+
+
+
+    /**
+     * !!!!!!!!!!!!!!!!!!! 유통기한 지난 물품 일괄 삭제하기 !!!!!!!!!!!!!!!
+     */
+    @GetMapping(value = "FoodDeleteShelf")
+    public String FoodDeleteShelf(ModelMap model) throws Exception{
+
+        log.info(this.getClass().getName() + ".FoodDeleteShelf start!");
+
+        String msg = "";
+        String url = "/market/FoodList";
+
+        try {
+            marketService.FoodDeleteShelf();
+            msg = "유통기한 지난 품목이 삭제되었습니다.";
+
+        } catch (Exception e) {
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            log.info(this.getClass().getName() + ".FoodDeleteShelf end!");
+
+
+            model.addAttribute("msg", msg);
+            model.addAttribute("url", url);
+
+        }
+
+        return "/redirect";
+    }
+
+
+    /**
+     * !!!!!!!!!!!!!!!!!!! 유통기간 지난 식품 게시판에서  개별 삭제하기 !!!!!!!!!!!!!!!
+     */
+    @PostMapping(value = "FoodDeleteShelfLine")
+    @ResponseBody
+    public List<FoodDTO> FoodDeleteShelfLine(HttpServletRequest request) throws Exception {
+
+        log.info(this.getClass().getName() + ".FoodDelete start!");
+
+
+        String p_num = CmmUtil.nvl(request.getParameter("p_num")); // 글번호(PK)
+
+        log.info("Pk키  : " + p_num);
+
+        FoodDTO pDTO = new FoodDTO();
+
+        pDTO.setP_num(p_num);
+
+        marketService.FoodDelete(pDTO);
+
+        List<FoodDTO> rList = marketService.FoodListShelf();
+
+        if (rList == null) {
+            rList = new ArrayList<>();
+        }
+
+        return rList;
+    }
+
+
+
+
+
+    @GetMapping(value = "MartMap") //회원정보에 등록된 마트위치 찾기
+    public String MartMap(Model model) throws Exception{
+        log.info(getClass().getName() + "MartMap start");
+
+        List<MarketInfoDTO> mList = marketService.MartMap();
+
+        if (mList == null){
+            mList = new ArrayList<>();
+            log.info("값이 반환되지 않음");
+        }
+
+        log.info(getClass().getName() + "MartMap end");
+
+        model.addAttribute("mList",mList);
+
+        return "/market/martMap";
+    }
+
+
+    @GetMapping(value = "PasingMap") // api 끌어와서 지도에 띄우기
+    public String pasingMap(Model model) throws Exception{
+        log.info(getClass().getName() + "pasingMap start");
+
+        List<MarketPasingDTO> pList = marketService.pasingMap();
+
+        if (pList == null){
+            pList = new ArrayList<>();
+            log.info("값이 반환되지 않음");
+        }
+
+        log.info(getClass().getName() + "pasingMap end");
+        for(MarketPasingDTO mdto :pList){
+           log.info(mdto.getBizplc_nm());
+        }
+        model.addAttribute("pList",pList);
+
+        return "/market/PasingMap";
+    }
+
+
+
+
+    @GetMapping(value = "Scan") // 스캐너 바코드 인식
+    public String Scan() throws Exception{
+        log.info(getClass().getName() + "Scan Start");
+        log.info(getClass().getName() + "Scan end");
+        return "/market/Sccan";
+    }
+
+    @GetMapping("qr")
+    public Object createQr(@RequestParam String url) throws WriterException, IOException {
+        int width = 200;
+        int height = 200;
+        BitMatrix matrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, width, height);
+
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+            MatrixToImageWriter.writeToStream(matrix, "PNG", out);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_PNG)
+                    .body(out.toByteArray());
+        }
+    }
+
+
+
+
+
+
+}

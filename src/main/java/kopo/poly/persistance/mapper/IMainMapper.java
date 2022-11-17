@@ -2,6 +2,7 @@ package kopo.poly.persistance.mapper;
 
 
 import kopo.poly.dto.FoodDTO;
+import kopo.poly.dto.NoticeDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -10,10 +11,11 @@ import java.util.List;
 public interface IMainMapper {
 
 
-    void InsertFood(FoodDTO fDTO)throws Exception;
+//    void InsertFood(FoodDTO fDTO)throws Exception;
+//
+//    List<FoodDTO> getFoodList();
 
-    List<FoodDTO> getFoodList();
-    List<FoodDTO> foodsell_up();
+//    FoodDTO getNoticeInfo(FoodDTO pDTO) throws Exception;
 
 
 }
