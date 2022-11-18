@@ -35,7 +35,7 @@ public interface IMarketMapper {
     List<MarketPasingDTO>pasingMap();
 
 
-    int InsertFoodInCart(CartDTO pDTO) throws Exception; // 가입하기
+    int InsertFoodInCart(CartDTO pDTO) throws Exception; // 카트에 넣기
 
     CartDTO SelectCountInCart(CartDTO rDTO) throws Exception; //넣기 전 중복체크
 }

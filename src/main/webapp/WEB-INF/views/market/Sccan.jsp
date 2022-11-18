@@ -56,7 +56,23 @@
     <script src="ogani-master/js/owl.carousel.min.js"></script>
     <script src="ogani-master/js/main.js"></script>
 
+    <style type="text/css">
+        #img_container {
+            position:absolute;
+            width:100%;
+            height:100%;
 
+        }
+
+        #img_container img {
+            position:absolute;
+            top:50%;
+            left:50%;
+            margin-top:-25px;
+            margin-left:-25px;
+
+        }
+    </style>
 
 
 </head>
@@ -77,126 +93,192 @@
 
 <!-- Include the image-diff library -->
 <script src="/quaggaJS/dist/quagga.min.js"></script>
-<script src="/js/quagga.js"></script>
 
 
 <!-- Div to show the scanner -->
 
-
-QR CODE
-<form action="/qr", method="get">
-    <input type="text" name="url"/><button type="submit">create</button>
-</form>
-
 <script>
+
     var _scannerIsRunning = false;
+
+
 
     function startScanner() {
 
         Quagga.init({
+
             inputStream: {
+
                 name: "Live",
+
                 type: "LiveStream",
+
                 target: document.querySelector('#scanner-container'),
+
                 constraints: {
+
                     width: 640,
+
                     height: 480,
+
                     facingMode: "environment"
+
                 },
-            },
-            decoder: {
-                readers : [{
-                    format: "code_128_reader",
-                    config: {}
-                }, {
-                    format: "ean_reader",
-                    config: {
-                    }
-                }, {
-                    format: "code_39_reader",
-                    config: {}
-                }, {
-                    format: "code_93_reader",
-                    config: {}
-                }]
+
             },
 
-            debug: {
+            decoder: {
+
+                readers: [
+
+                    "code_93_reader"
+
+                ],
+
+                debug: {
+
                     showCanvas: true,
+
                     showPatches: true,
+
                     showFoundPatches: true,
+
                     showSkeleton: true,
+
                     showLabels: true,
+
                     showPatchLabels: true,
+
                     showRemainingPatchLabels: true,
+
                     boxFromPatches: {
+
                         showTransformed: true,
+
                         showTransformedBox: true,
+
                         showBB: true
+
                     }
+
                 }
+
             },
+
+
 
         }, function (err) {
+
             if (err) {
+
                 console.log(err);
+
                 return
+
             }
+
+
 
             console.log("Initialization finished. Ready to start");
+
             Quagga.start();
 
+
+
             // Set flag to is running
+
             _scannerIsRunning = true;
+
         });
+
+
 
         Quagga.onProcessed(function (result) {
+
             var drawingCtx = Quagga.canvas.ctx.overlay,
+
                 drawingCanvas = Quagga.canvas.dom.overlay;
 
+
+
             if (result) {
+
                 if (result.boxes) {
+
                     drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+
                     result.boxes.filter(function (box) {
+
                         return box !== result.box;
+
                     }).forEach(function (box) {
+
                         Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, { color: "green", lineWidth: 2 });
+
                     });
+
                 }
+
+
 
                 if (result.box) {
+
                     Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, { color: "#00F", lineWidth: 2 });
+
                 }
 
+
+
                 if (result.codeResult && result.codeResult.code) {
+
                     Quagga.ImageDebug.drawPath(result.line, { x: 'x', y: 'y' }, drawingCtx, { color: 'red', lineWidth: 3 });
+
                 }
+
             }
+
         });
+
+
+
 
 
         Quagga.onDetected(function (result) {
+
             console.log("Barcode detected and processed : [" + result.codeResult.code + "]", result);
-                     alert("Barcode detected and processed : [" + result.codeResult.code + "]")
-            count_num = result.codeResult.code;
-            document.ex_form.target_name.value = count_num;
+
+            alert("Barcode detected and processed : [" + result.codeResult.code + "]")
+
         });
+
     }
 
 
+
+
+
     // Start/stop scanner
+
     document.getElementById("btn").addEventListener("click", function () {
+
         if (_scannerIsRunning) {
+
             Quagga.stop();
+
         } else {
+
             startScanner();
+
         }
+
     }, false);
+
 </script>
 
 
+
 <form method="post" name="ex_form" action="doService">
-    <input type="text" name="target_name" value="">
+    <input type="text" name="target_name" value="result.codeResult.code">
     <input type="button" name="anything_name" value="submit" onclick=ex_form.submit();>
 </form>
 

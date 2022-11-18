@@ -408,15 +408,6 @@ public class MarketController {
 
 
 
-
-
-
-
-
-
-    //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ11/08
-
-
     @GetMapping(value = "FoodListShelf") // 유통기한 지난 것들 게시판
     public String FoodListShelf(Model model) throws Exception {
 
@@ -501,8 +492,39 @@ public class MarketController {
         return rList;
     }
 
+    @GetMapping(value = "Scan") // 스캐너 바코드 인식
+    public String Scan() throws Exception{
+        log.info(getClass().getName() + "Scan Start");
 
 
+
+
+
+        log.info(getClass().getName() + "Scan end");
+        return "/market/s1";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
 
     @GetMapping(value = "MartMap") //회원정보에 등록된 마트위치 찾기
@@ -546,13 +568,6 @@ public class MarketController {
 
 
 
-
-    @GetMapping(value = "Scan") // 스캐너 바코드 인식
-    public String Scan() throws Exception{
-        log.info(getClass().getName() + "Scan Start");
-        log.info(getClass().getName() + "Scan end");
-        return "/market/Sccan";
-    }
 
 
     @PostMapping(value = "cart_add") // 상품 카트 추가

@@ -146,201 +146,142 @@
     </style>
 
 
-
 </head>
 <body>
 <!-- Header Section Begin -->
 <%@include file="../includes/header.jsp"%>
 
+
+
+
+
+
+<%--<script src="/quaggaJS/dist/quagga.min.js"></script>--%>
+
+
 <section class="contact-form section-padding3" >
     <div class="login-page" id="scanner-container">
+        <input type="button" id="btn" value="Start/Stop the scanner" />
 
+        <form method="post" name="ex_form" action="doService">
+            <input type="text" name="target_name" value="">
+            <input type="button" name="anything_name" value="submit" onclick=ex_form.submit();>
+        </form>
 
     </div>
 </section>
 
 
+
+
+<%--<div id="scanner-container"></div>--%>
+<%--<input type="button" id="btn" value="Start/Stop the scanner" />--%>
+
+<!-- Include the image-diff library -->
 <script src="/quaggaJS/dist/quagga.min.js"></script>
+<script src="/js/quagga.js"></script>
+
+
+<!-- Div to show the scanner -->
 
 
 
 <script>
-
     var _scannerIsRunning = false;
-
-
 
     function startScanner() {
 
         Quagga.init({
-
             inputStream: {
-
                 name: "Live",
-
                 type: "LiveStream",
-
                 target: document.querySelector('#scanner-container'),
-
                 constraints: {
-
                     width: 640,
-
                     height: 480,
-
                     facingMode: "environment"
-
                 },
-
             },
-
             decoder: {
-
-                readers: [
-
-                    "code_128_reader"
-
-                ],
-
+                readers : ['ean_reader'],
                 debug: {
-
                     showCanvas: true,
-
                     showPatches: true,
-
                     showFoundPatches: true,
-
                     showSkeleton: true,
-
                     showLabels: true,
-
                     showPatchLabels: true,
-
                     showRemainingPatchLabels: true,
-
                     boxFromPatches: {
-
                         showTransformed: true,
-
                         showTransformedBox: true,
-
                         showBB: true
-
                     }
-
                 }
-
             },
-
-
 
         }, function (err) {
-
             if (err) {
-
                 console.log(err);
-
                 return
-
             }
 
-
-
             console.log("Initialization finished. Ready to start");
-
             Quagga.start();
 
-
-
             // Set flag to is running
-
             _scannerIsRunning = true;
-
         });
-
-
 
         Quagga.onProcessed(function (result) {
-
             var drawingCtx = Quagga.canvas.ctx.overlay,
-
                 drawingCanvas = Quagga.canvas.dom.overlay;
 
-
-
             // if (result) {
-            //
             //     if (result.boxes) {
-            //
             //         drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
-            //
             //         result.boxes.filter(function (box) {
-            //
             //             return box !== result.box;
-            //
             //         }).forEach(function (box) {
-            //
             //             Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, { color: "green", lineWidth: 2 });
-            //
             //         });
-            //
             //     }
-            //
-            //
             //
             //     if (result.box) {
-            //
             //         Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, { color: "#00F", lineWidth: 2 });
-            //
             //     }
-            //
-            //
             //
             //     if (result.codeResult && result.codeResult.code) {
-            //
             //         Quagga.ImageDebug.drawPath(result.line, { x: 'x', y: 'y' }, drawingCtx, { color: 'red', lineWidth: 3 });
-            //
             //     }
-            //
             // }
-
         });
-
-
-
 
 
         Quagga.onDetected(function (result) {
-
             console.log("Barcode detected and processed : [" + result.codeResult.code + "]", result);
-
-            alert("Barcode detected and processed : [" + result.codeResult.code + "]")
-
+                     alert("Barcode detected and processed : [" + result.codeResult.code + "]")
+            count_num = result.codeResult.code;
+            document.ex_form.target_name.value = count_num;
         });
-
     }
 
 
-
-
-
     // Start/stop scanner
-
     document.getElementById("btn").addEventListener("click", function () {
-
         if (_scannerIsRunning) {
-
             Quagga.stop();
-
         } else {
-
             startScanner();
-
         }
-
     }, false);
-
 </script>
+
+
+<%--<form method="post" name="ex_form" action="doService">--%>
+<%--    <input type="text" name="target_name" value="">--%>
+<%--    <input type="button" name="anything_name" value="submit" onclick=ex_form.submit();>--%>
+<%--</form>--%>
 
 
 

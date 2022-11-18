@@ -8,21 +8,25 @@ import lombok.Setter;
 @Setter
 public class FoodDTO {
 
-    private String p_num;
-    private String p_name;
-    private String p_price;
-    private String p_sell;
-    private String p_info;
-    private String p_period;
-    private String p_category;
-    private String p_enroll;
+    private String p_num; //pk
+    private String p_name; //이름
+    private String p_price; // 가격
+    private String p_sell; //수량
+    private String p_info; // 상품설명
+    private String p_period; //유통기한
+    private String p_category; // 카테고리
+    private String p_enroll; //등록일
 
-    private String p_filePath;
-    private String p_fileName;
+    private String p_filePath; //파일경로
+    private String p_fileName; //파일이름
 
-    private String p_discount;
-    private String p_ancestry;
-    private String p_weight;
+    private String p_discount; //할인율
+    private String p_ancestry; //원산지
+    private String p_weight; //무게
+
+    private String p_barcode; //바코드
+
+
 
 
 }
