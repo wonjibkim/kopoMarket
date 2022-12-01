@@ -35,9 +35,9 @@ import java.util.Scanner;
 @RequestMapping(value = "market")
 public class MarketController {
 
-    final private String FILE_UPLOAD_SAVE_PATH = "c:/JAVAproject/market22/kopoMarket/src/main/resources"; // C:\\upload 폴더에 저장
+    final private String FILE_UPLOAD_SAVE_PATH = "C:/JAVAproject/market22/wj_makert_11_18/kopoMarket/src/main/resources/static"; // C:\\upload 폴더에 저장
 
-    @Resource(name = "MarketService")
+    @Resource(name = "MarketService") //서비스 메모리에 올리기
     private IMarketService marketService;
 
 
@@ -60,7 +60,7 @@ public class MarketController {
         log.info(this.getClass().getName() + "FoodInsert start");
 
         String msg = "";
-        String url = "/market/FoodReg";
+        String url = "/market/FoodList";
 
 
         try {
@@ -88,8 +88,11 @@ public class MarketController {
             String saveFilePath = FileUtil.mkdirForDate(FILE_UPLOAD_SAVE_PATH);
 
 
+
             // EX) C:/upload/2022_10_07/162235_jpg
             String fullFileInfo = saveFilePath + "/" + saveFileName;
+
+            String makret_seq = CmmUtil.nvl((String) session.getAttribute("seq"));
 
 
             // 업로드 되는 파일을 서버에 저장
@@ -128,11 +131,12 @@ public class MarketController {
             fDTO.setP_period(p_period);
             fDTO.setP_category(p_category);
             fDTO.setP_fileName(saveFileName); // 저장되는 파일명
-            fDTO.setP_filePath(saveFilePath);
+            fDTO.setP_filePath(saveFilePath.replaceAll(FILE_UPLOAD_SAVE_PATH,""));
 
             fDTO.setP_discount(p_discount);
             fDTO.setP_ancestry(p_ancestry);
             fDTO.setP_weight(p_weight);
+            fDTO.setMarket_seq(makret_seq);
 
             //////////////////////////////////////////////////////
 
@@ -291,6 +295,7 @@ public class MarketController {
             String p_period = CmmUtil.nvl(request.getParameter("p_period"));
             String p_category = CmmUtil.nvl(request.getParameter("p_category"));
 
+
             String p_discount = CmmUtil.nvl(request.getParameter("p_discount"));
             String p_ancestry = CmmUtil.nvl(request.getParameter("p_ancestry"));
             String p_weight = CmmUtil.nvl(request.getParameter("p_weight"));
@@ -318,7 +323,7 @@ public class MarketController {
             fDTO.setP_period(p_period);
             fDTO.setP_category(p_category);
             fDTO.setP_fileName(saveFileName); // 저장되는 파일명
-            fDTO.setP_filePath(saveFilePath);
+            fDTO.setP_filePath(saveFilePath.replaceAll(FILE_UPLOAD_SAVE_PATH,""));
 
             fDTO.setP_discount(p_discount);
             fDTO.setP_ancestry(p_ancestry);
@@ -483,6 +488,8 @@ public class MarketController {
 
         marketService.FoodDelete(pDTO);
 
+
+
         List<FoodDTO> rList = marketService.FoodListShelf();
 
         if (rList == null) {
@@ -491,17 +498,53 @@ public class MarketController {
 
         return rList;
     }
+    @GetMapping(value = "update_barcode")
+    public String update_barcode()throws Exception{
 
-    @GetMapping(value = "Scan") // 스캐너 바코드 인식
-    public String Scan() throws Exception{
-        log.info(getClass().getName() + "Scan Start");
+        log.info(getClass().getName()+"update_barcode start");
+
+        log.info(getClass().getName()+"update_barcode end");
+
+        return "/market/barcode_subtract";
+    }
 
 
 
+    @PostMapping( value = "update_subtract") // 바코드 수량 하나 뺴기
+    public String update_barcode(HttpServletRequest request,ModelMap model) throws Exception{
+        log.info(getClass().getName() + "update_barcode Start");
 
 
-        log.info(getClass().getName() + "Scan end");
-        return "/market/s1";
+        String msg="";
+        String url="/market/barcode_subtract";
+
+        try {
+            String p_barcode = CmmUtil.nvl(request.getParameter("p_barcode")); //jsp에서 바코드 값 가져오기
+            log.info("바코드 숫자"+ p_barcode);
+
+            FoodDTO fDTO = new FoodDTO(); //바코드 값을 담기위한 dto 생성
+            fDTO.setP_barcode(p_barcode); // 바코드 dto에 넣기
+
+            marketService.update_barcode(fDTO);
+            msg="상품수량이 -1이 빠졌습니다"; //alret창에 보여줄 메세지
+
+        }catch (Exception e) { //에러가 있으면 보여줄 메세지
+
+            // 저장이 실패되면 사용자에게 보여줄 메시지
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            log.info(this.getClass().getName() + ".update_barcode end!");
+
+            // 결과 메시지 전달하기
+            model.addAttribute("msg", msg);
+            model.addAttribute("url",url);
+
+        }
+
+        return "/redirect";
     }
 
 

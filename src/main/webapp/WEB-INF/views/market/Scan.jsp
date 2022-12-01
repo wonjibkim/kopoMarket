@@ -5,18 +5,6 @@
 <%@ page import="kopo.poly.dto.FoodDTO" %>
 <%@ page import="java.util.ArrayList" %>
 
-<%
-//    session.setAttribute("SESSION_USER_ID", "USER01");
-
-    List<FoodDTO> rList = (List<FoodDTO>) request.getAttribute("rList");
-
-
-    if (rList == null) {
-        rList = new ArrayList<FoodDTO>();
-
-    }
-
-%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -27,14 +15,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
-    <link rel="stylesheet" href="ogani-master/css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/elegant-icons.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/nice-select.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/jquery-ui.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/owl.carousel.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/style.css" type="text/css">
 
     <!--    registration css-->
     <link rel="stylesheet" href="/comport-master/assets/css/animate-3.7.0.css">
@@ -47,14 +35,14 @@
 
 
 <%--    js--%>
-    <script src="ogani-master/js/jquery-3.3.1.min.js"></script>
-    <script src="ogani-master/js/bootstrap.min.js"></script>
-    <script src="ogani-master/js/jquery.nice-select.min.js"></script>
-    <script src="ogani-master/js/jquery-ui.min.js"></script>
-    <script src="ogani-master/js/jquery.slicknav.js"></script>
-    <script src="ogani-master/js/mixitup.min.js"></script>
-    <script src="ogani-master/js/owl.carousel.min.js"></script>
-    <script src="ogani-master/js/main.js"></script>
+    <script src="/ogani-master/js/jquery-3.3.1.min.js"></script>
+    <script src="/ogani-master/js/bootstrap.min.js"></script>
+    <script src="/ogani-master/js/jquery.nice-select.min.js"></script>
+    <script src="/ogani-master/js/jquery-ui.min.js"></script>
+    <script src="/ogani-master/js/jquery.slicknav.js"></script>
+    <script src="/ogani-master/js/mixitup.min.js"></script>
+    <script src="/ogani-master/js/owl.carousel.min.js"></script>
+    <script src="/ogani-master/js/main.js"></script>
 
     <style>
         @import url(https://fonts.googleapis.com/css?family=Roboto:300);
@@ -146,201 +134,133 @@
     </style>
 
 
-
 </head>
 <body>
 <!-- Header Section Begin -->
 <%@include file="../includes/header.jsp"%>
 
+
+
+
+
+
+<script src="/quaggaJS/dist/quagga.min.js"></script>
+
+
 <section class="contact-form section-padding3" >
     <div class="login-page" id="scanner-container">
+        <input type="button" id="btn" value="Start/Stop the scanner" />
 
+        <form name="f" method="post" action="/market/update_subtract">
+            <input type="text" name="p_barcode" value="">
+                <button type="submit" class="site-btn">수량빼기</button>
+        </form>
 
     </div>
 </section>
 
 
 <script src="/quaggaJS/dist/quagga.min.js"></script>
+<script src="/js/quagga.js"></script>
+
+
+<!-- Div to show the scanner -->
 
 
 
 <script>
-
     var _scannerIsRunning = false;
-
-
 
     function startScanner() {
 
         Quagga.init({
-
             inputStream: {
-
                 name: "Live",
-
                 type: "LiveStream",
-
                 target: document.querySelector('#scanner-container'),
-
                 constraints: {
-
                     width: 640,
-
                     height: 480,
-
                     facingMode: "environment"
-
                 },
-
             },
-
             decoder: {
-
-                readers: [
-
-                    "code_128_reader"
-
-                ],
-
+                readers : ['ean_reader'],
                 debug: {
-
                     showCanvas: true,
-
                     showPatches: true,
-
                     showFoundPatches: true,
-
                     showSkeleton: true,
-
                     showLabels: true,
-
                     showPatchLabels: true,
-
                     showRemainingPatchLabels: true,
-
                     boxFromPatches: {
-
                         showTransformed: true,
-
                         showTransformedBox: true,
-
                         showBB: true
-
                     }
-
                 }
-
             },
-
-
 
         }, function (err) {
-
             if (err) {
-
                 console.log(err);
-
                 return
-
             }
 
-
-
             console.log("Initialization finished. Ready to start");
-
             Quagga.start();
 
-
-
             // Set flag to is running
-
             _scannerIsRunning = true;
-
         });
-
-
 
         Quagga.onProcessed(function (result) {
-
             var drawingCtx = Quagga.canvas.ctx.overlay,
-
                 drawingCanvas = Quagga.canvas.dom.overlay;
 
-
-
             // if (result) {
-            //
             //     if (result.boxes) {
-            //
             //         drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
-            //
             //         result.boxes.filter(function (box) {
-            //
             //             return box !== result.box;
-            //
             //         }).forEach(function (box) {
-            //
             //             Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, { color: "green", lineWidth: 2 });
-            //
             //         });
-            //
             //     }
-            //
-            //
             //
             //     if (result.box) {
-            //
             //         Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, { color: "#00F", lineWidth: 2 });
-            //
             //     }
-            //
-            //
             //
             //     if (result.codeResult && result.codeResult.code) {
-            //
             //         Quagga.ImageDebug.drawPath(result.line, { x: 'x', y: 'y' }, drawingCtx, { color: 'red', lineWidth: 3 });
-            //
             //     }
-            //
             // }
-
         });
-
-
-
 
 
         Quagga.onDetected(function (result) {
-
             console.log("Barcode detected and processed : [" + result.codeResult.code + "]", result);
-
-            alert("Barcode detected and processed : [" + result.codeResult.code + "]")
-
+                     alert("Barcode detected and processed : [" + result.codeResult.code + "]")
+            count_num = result.codeResult.code;
+            document.ex_form.target_name.value = count_num;
         });
-
     }
 
 
-
-
-
     // Start/stop scanner
-
     document.getElementById("btn").addEventListener("click", function () {
-
         if (_scannerIsRunning) {
-
             Quagga.stop();
-
         } else {
-
             startScanner();
-
         }
-
     }, false);
-
 </script>
+
+
+
 
 
 

@@ -46,11 +46,30 @@
                         $('#test').empty();
                         var str = '';
                         for(var i=0; i<result.length;i++) {
-                            str += '<tr><td class="shoping__cart__item"> <h5><a href="javascript:doDetail(' + result[i].p_num +');">' + result[i].p_name + '</a> </h5></td>' +
-                                ' <td class="shoping__cart__price">' +result[i].p_price+' <td class="shoping__cart__total">'+ result[i].p_sell + '<td>' +
-                                '<td class="shoping__cart__total">'+result[i].p_period + '<td>' +
-                                '<td class="shoping__cart__total">' + result[i].p_ancestry +'<td>'+
-                                '<a href="javascript:FoodDelete('+result[i].p_num +');"><span class="icon_close"></span></a></td><tr>'
+                            str +=
+                                '<tr><td class="shoping__cart__item">' +
+
+
+                                '<img style="width: 150px; height: 150px; object-fit: cover;" src="'+
+                                result[i].p_filePath + '/' + result[i].p_fileName +
+                                '" alt="">'
+
+
+
+
+                                +
+                                '<h5><a href="javascript:doDetail('+result[i].food_num
+                                +');">'+ result[i].p_name + '</a></h5></td>'
+
+
+                                + '<td class="shoping__cart__price">' + result[i].p_price + '</td>'
+                                + '<td class="shoping__cart__price">' +       result[i].p_sell   +'</td>'
+                                + '<td class="shoping__cart__price">' +       result[i].p_period   +'</td>'
+                                + '<td class="shoping__cart__price">' +       result[i].p_ancestry   +'</td>'
+
+                                +'<td class="shoping__cart__item__close"><a href="javascript:FoodDelete('
+                                +result[i].p_num
+                                +');"><span class="icon_close"></span></a></td></tr>'
 
                         }
                         $('#test').append(str);
@@ -162,48 +181,50 @@
 
                         %>
 
-                        <%--                            <img src="img/cart/cart-1.jpg" alt=""> 이미지 넣기--%>
+                        <%--                            <img src="<%=rDTO.getP_filePath()%>" alt=""> 이미지 넣기--%>
                         <tr>
-                            <td class="shoping__cart__item"> <h5>
-                                <a href="javascript:doDetail('<%=CmmUtil.nvl(rDTO.getP_num())%>');">
-                                        <%=CmmUtil.nvl(rDTO.getP_name())%> </a> </h5></td>
+                            <td class="shoping__cart__item">
+                                <img style="width: 150px; height: 150px; object-fit: cover;"
+                                     src="<%=rDTO.getP_filePath()%>/<%=rDTO.getP_fileName()%>" alt="">
+                                <h5>  <a href="javascript:doDetail('<%=CmmUtil.nvl(rDTO.getP_num())%>');"> <%=CmmUtil.nvl(rDTO.getP_name())%> </a> </h5>
+                            </td>
 
-                            <td class="shoping__cart__price"> <%=CmmUtil.nvl(rDTO.getP_price())%></td>
+                            <td class="shoping__cart__price"><%=CmmUtil.nvl(rDTO.getP_price())%>
+                            </td>
 
-<%--                            수량 text 상자로--%>
+                            <%--                            수량 text 상자로--%>
 
-<%--                            <td class="shoping__cart__quantity">--%>
-<%--                                <div class="quantity">--%>
-<%--                                    <div class="pro-qty">--%>
-<%--                                        <input type="text" value="<%=CmmUtil.nvl(rDTO.getP_sell())%>">--%>
-<%--                                    </div>--%>
-<%--                                </div>--%>
-<%--                            </td>--%>
+                            <%--                            <td class="shoping__cart__quantity">--%>
+                            <%--                                <div class="quantity">--%>
+                            <%--                                    <div class="pro-qty">--%>
+                            <%--                                        <input type="text" value="<%=CmmUtil.nvl(rDTO.getP_sell())%>">--%>
+                            <%--                                    </div>--%>
+                            <%--                                </div>--%>
+                            <%--                            </td>--%>
 
-                            <td class="shoping__cart__total"><%=CmmUtil.nvl(rDTO.getP_sell())%></td>
+                            <td class="shoping__cart__total"><%=CmmUtil.nvl(rDTO.getP_sell())%>
+                            </td>
 
-                            <td class="shoping__cart__total"><%= rList.get(i).getP_period()%></td>
+                            <td class="shoping__cart__total"><%= rList.get(i).getP_period()%>
+                            </td>
 
-                            <td class="shoping__cart__total"><%= rList.get(i).getP_ancestry()%></td>
+                            <td class="shoping__cart__total"><%= rList.get(i).getP_ancestry()%>
+                            </td>
 
                             <td class="shoping__cart__item__close">
 
-<%--                                <a href="javascript:doDetail('<%=CmmUtil.nvl(rDTO.getP_num())%>');">--%>
-<%--                                    <%=CmmUtil.nvl(rDTO.getP_name())%> </a>--%>
-    <a href="javascript:FoodDelete('<%=CmmUtil.nvl(rDTO.getP_num())%>');">
-        <span class="icon_close"></span>
-    </a>
-
-
+                                <%--                                <a href="javascript:doDetail('<%=CmmUtil.nvl(rDTO.getP_num())%>');">--%>
+                                <%--                                    <%=CmmUtil.nvl(rDTO.getP_name())%> </a>--%>
+                                <a href="javascript:FoodDelete('<%=CmmUtil.nvl(rDTO.getP_num())%>');">
+                                    <span class="icon_close"></span>
+                                </a>
 
 
                             </td>
 
 
-<%--                            <a href="javascript:doDetail('<%=CmmUtil.nvl(rDTO.getP_num())%>');">--%>
-<%--                                <%=CmmUtil.nvl(rDTO.getP_name())%> </a>--%>
-
-
+                            <%--                            <a href="javascript:doDetail('<%=CmmUtil.nvl(rDTO.getP_num())%>');">--%>
+                            <%--                                <%=CmmUtil.nvl(rDTO.getP_name())%> </a>--%>
 
 
                         </tr>

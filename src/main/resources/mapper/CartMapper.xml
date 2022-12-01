@@ -4,6 +4,122 @@
 
 <mapper namespace="kopo.poly.persistance.mapper.ICartMapper">
 
+    <!--    카트 품목이 있는지 확인하는 쿼리
+ 카트에 담아 있으면 1 아니면 0 -->
+    <select id="SelectCountInCart" resultType="cartDTO" parameterType="cartDTO">
+
+        SELECT
+            CASE
+                WHEN COUNT(1)
+                    THEN 'Y'
+                ELSE 'N'
+                END AS EXISTS_YN
+        FROM CART WHERE USER_SEQ=#{user_seq} AND FOOD_NUM=#{food_num}
+    </select>
+
+
+    <!--    카트 추가 쿼리-->
+    <insert id="InsertFoodInCart" parameterType="cartDTO">
+
+        INSERT INTO CART
+        (
+
+            CART_COUNT,
+            CART_DATE,
+            USER_SEQ,
+            FOOD_NUM
+        )
+        VALUES (
+
+                   #{cart_count},
+                   SYSDATE(),
+                   #{user_seq},
+                   #{food_num}
+               )
+
+
+
+    </insert>
+
+<!--카트보기-->
+    <select id="cartList" parameterType="Cart_foodDTO" resultType="Cart_foodDTO">
+        select  * from food left join cart c on food.P_NUM = c.food_num where user_seq=#{user_seq}
+    </select>
+
+    <delete id="cartDelete" parameterType="java.util.List">
+            DELETE FROM CART
+        where CART_NUM IN
+        <foreach collection="list" item="item" index="i" open="(" separator="," close=")">
+            #{item}
+            </foreach>
+
+    </delete>
+
+    <select id="CartFoodSelect" parameterType="CartDTO" resultType="PayDTO">
+        select * from food left join cart c on food.P_NUM = c.food_num where USER_SEQ=#{user_seq};
+    </select>
+
+<!--ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ-->
+
+    <select id="getcartPurchase" parameterType="CartDTO" resultType="CartDTO">
+        SELECT CART_COUNT,FOOD_NUM FROM CART
+        where USER_SEQ=#{user_seq}
+    </select>
+
+    <update id="cartPurchaseUpdate" parameterType="FoodDTO">
+        UPDATE 	food
+        SET	P_SELL = P_SELL-#{cart_count}
+        WHERE P_NUM =#{food_num}
+    </update>
+
+    <select id="getCartPay" parameterType="CartDTO" resultType="PayDTO">
+        select  user_seq,food_num,cart_count,P_PRICE,P_NAME from food left join cart c on food.P_NUM = c.food_num where USER_SEQ=#{user_seq};
+    </select>
+
+
+
+    <insert id="InsertPay" parameterType="PayDTO">
+
+        INSERT INTO PAY
+        (
+            USER_SEQ,
+            FOOD_NUM,
+            CART_COUNT,
+            P_PRICE,
+            P_NAME,
+            PAY_DATE,
+            PRICE_SUM
+        )VALUES (
+                    #{user_seq},
+                    #{food_num},
+                    #{cart_count},
+                    #{p_price},
+                    #{p_name},
+                    SYSDATE(),
+                    #{cart_count}*#{p_price}
+                )
+    </insert>
+
+    <delete id="cartAllDelete" parameterType="CartDTO">
+        DELETE FROM CART where USER_SEQ=#{user_seq};
+    </delete>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

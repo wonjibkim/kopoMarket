@@ -79,7 +79,7 @@
                     <p><%=CmmUtil.nvl(rDTO.getP_info())%></p>
 
                     //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-                    <form action="/market/cart_add" method="post">
+                    <form action="/Cart/cart_add" method="post">
                     <div class="product__details__quantity">
                         <div class="quantity">
                             <div class="pro-qty">

@@ -25,6 +25,7 @@ public class FoodDTO {
     private String p_weight; //무게
 
     private String p_barcode; //바코드
+    private String market_seq;
 
 
 

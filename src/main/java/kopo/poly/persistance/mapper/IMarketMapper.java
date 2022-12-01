@@ -11,6 +11,8 @@ import java.util.List;
 @Mapper
 public interface IMarketMapper {
 
+
+
     void FoodInsert(FoodDTO fDTO)throws Exception;
 
     List<FoodDTO> FoodList();
@@ -38,4 +40,7 @@ public interface IMarketMapper {
     int InsertFoodInCart(CartDTO pDTO) throws Exception; // 카트에 넣기
 
     CartDTO SelectCountInCart(CartDTO rDTO) throws Exception; //넣기 전 중복체크
+
+
+    void update_barcode(FoodDTO fDTO); // 바코드로 수량뺴기 쿼리
 }

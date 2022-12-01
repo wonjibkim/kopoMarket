@@ -5,18 +5,6 @@
 <%@ page import="kopo.poly.dto.FoodDTO" %>
 <%@ page import="java.util.ArrayList" %>
 
-<%
-//    session.setAttribute("SESSION_USER_ID", "USER01");
-
-    List<FoodDTO> rList = (List<FoodDTO>) request.getAttribute("rList");
-
-
-    if (rList == null) {
-        rList = new ArrayList<FoodDTO>();
-
-    }
-
-%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -27,14 +15,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
-    <link rel="stylesheet" href="ogani-master/css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/elegant-icons.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/nice-select.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/jquery-ui.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/owl.carousel.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/style.css" type="text/css">
 
     <!--    registration css-->
     <link rel="stylesheet" href="/comport-master/assets/css/animate-3.7.0.css">
@@ -47,14 +35,14 @@
 
 
 <%--    js--%>
-    <script src="ogani-master/js/jquery-3.3.1.min.js"></script>
-    <script src="ogani-master/js/bootstrap.min.js"></script>
-    <script src="ogani-master/js/jquery.nice-select.min.js"></script>
-    <script src="ogani-master/js/jquery-ui.min.js"></script>
-    <script src="ogani-master/js/jquery.slicknav.js"></script>
-    <script src="ogani-master/js/mixitup.min.js"></script>
-    <script src="ogani-master/js/owl.carousel.min.js"></script>
-    <script src="ogani-master/js/main.js"></script>
+    <script src="/ogani-master/js/jquery-3.3.1.min.js"></script>
+    <script src="/ogani-master/js/bootstrap.min.js"></script>
+    <script src="/ogani-master/js/jquery.nice-select.min.js"></script>
+    <script src="/ogani-master/js/jquery-ui.min.js"></script>
+    <script src="/ogani-master/js/jquery.slicknav.js"></script>
+    <script src="/ogani-master/js/mixitup.min.js"></script>
+    <script src="/ogani-master/js/owl.carousel.min.js"></script>
+    <script src="/ogani-master/js/main.js"></script>
 
     <style>
         @import url(https://fonts.googleapis.com/css?family=Roboto:300);
@@ -156,20 +144,25 @@
 
 
 
-<%--<script src="/quaggaJS/dist/quagga.min.js"></script>--%>
+<script src="/quaggaJS/dist/quagga.min.js"></script>
 
 
 <section class="contact-form section-padding3" >
     <div class="login-page" id="scanner-container">
         <input type="button" id="btn" value="Start/Stop the scanner" />
 
-        <form method="post" name="ex_form" action="doService">
-            <input type="text" name="target_name" value="">
-            <input type="button" name="anything_name" value="submit" onclick=ex_form.submit();>
+        <form name="f" method="post" action="/market/update_subtract">
+            <input type="text" name="p_barcode" value="">
+                <button type="submit" class="site-btn">수량빼기</button>
         </form>
 
     </div>
 </section>
+
+<%--        <form method="post" action="update_subtract">--%>
+<%--            <input type="text" name="target_name" value="">--%>
+<%--            <input type="submit"  value="제출하기">--%>
+<%--        </form>--%>
 
 
 

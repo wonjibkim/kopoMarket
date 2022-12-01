@@ -12,14 +12,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
-    <link rel="stylesheet" href="ogani-master/css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/elegant-icons.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/nice-select.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/jquery-ui.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/owl.carousel.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="ogani-master/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/ogani-master/css/style.css" type="text/css">
 
     <!--    registration css-->
     <link rel="stylesheet" href="/comport-master/assets/css/animate-3.7.0.css">
@@ -32,14 +32,14 @@
 
 
 <%--    js--%>
-    <script src="ogani-master/js/jquery-3.3.1.min.js"></script>
-    <script src="ogani-master/js/bootstrap.min.js"></script>
-    <script src="ogani-master/js/jquery.nice-select.min.js"></script>
-    <script src="ogani-master/js/jquery-ui.min.js"></script>
-    <script src="ogani-master/js/jquery.slicknav.js"></script>
-    <script src="ogani-master/js/mixitup.min.js"></script>
-    <script src="ogani-master/js/owl.carousel.min.js"></script>
-    <script src="ogani-master/js/main.js"></script>
+    <script src="/ogani-master/js/jquery-3.3.1.min.js"></script>
+    <script src="/ogani-master/js/bootstrap.min.js"></script>
+    <script src="/ogani-master/js/jquery.nice-select.min.js"></script>
+    <script src="/ogani-master/js/jquery-ui.min.js"></script>
+    <script src="/ogani-master/js/jquery.slicknav.js"></script>
+    <script src="/ogani-master/js/mixitup.min.js"></script>
+    <script src="/ogani-master/js/owl.carousel.min.js"></script>
+    <script src="/ogani-master/js/main.js"></script>
     <script type="text/javascript">
 
         function doRegUserCheck(f) {
@@ -110,21 +110,35 @@
 
     </script>
 
-<%--    <style>--%>
-<%--        .form-select {--%>
-<%--            width: 100%;--%>
-<%--            height: 50px;--%>
-<%--            font-size: 16px;--%>
-<%--            color: #6f6f6f;--%>
-<%--            padding-left: 20px;--%>
-<%--            margin-bottom: 30px;--%>
-<%--            border: 1px solid #ebebeb;--%>
-<%--            border-radius: 4px;--%>
-<%--        }--%>
+        <style>
+            .select {
+                padding: 15px 10px;
+            }
+            .select input[type=radio]{
+                display: none;
+            }
+            .select input[type=radio]+label{
+                display: inline-block;
+                cursor: pointer;
+                height: 24px;
+                width: 90px;
+                border: 1px solid #333;
+                line-height: 24px;
+                text-align: center;
+                font-weight:bold;
+                font-size:13px;
+            }
+            .select input[type=radio]+label{
+                background-color: #fff;
+                color: #333;
+            }
+            .select input[type=radio]:checked+label{
+                background-color: #333;
+                color: #fff;
+            }
 
 
-
-<%--    </style>--%>
+</style>
 
 </head>
 <body>
@@ -221,15 +235,20 @@
 
                 <div class="col-lg-6">
                 <div class="input-group-icon mt-10">
-                    <p>상품 카테고리</p>
 
+                    <div class="checkout__input">
+                        <p>상품카테고리</p>
 
-                    <div class="form-select" id="default">
-                        <select name="p_category" style="/* display: none; */" class="nice-select">
-                            <option value="0" selected="">야채</option>
-                            <option value="1">과일</option>
-                            <option value="2">과자</option>
-                        </select>
+                        <div class="select">
+                            <input type="radio" id="select" name="p_category" value=" Vegetables"><label for="select">야채</label>
+                            <input type="radio" id="select2" name="p_category" value="Meat" ><label for="select2">고기</label>
+                            <input type="radio" id="select3" name="p_category" value="Fruit" ><label for="select3">과일</label>
+                            <input type="radio" id="select4" name="p_category" value="Snack" ><label for="select4">과자</label>
+                            <input type="radio" id="select5" name="p_category" value="Fish" ><label for="select5">고기</label>
+                            <input type="radio" id="select6" name="p_category" value="Mushroom" ><label for="select6">버섯</label>
+                            <input type="radio" id="select7" name="p_category" value="Bread" ><label for="select7">빵</label>
+                        </div>
+
                     </div>
 
 
@@ -258,6 +277,21 @@
                     </div>
                 </div>
 
+<%--                <div class="col-lg-6">--%>
+<%--                    <div class="checkout__input">--%>
+<%--                        <p>바코드</p>--%>
+<%--                        <input type="text"  multiple="multiple" name="fileUpload"/>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+
+
+<%--                <div class="col-lg-6">--%>
+<%--                    <div class="checkout__input">--%>
+<%--                        <p>파일사진</p>--%>
+<%--                        <input type="file"  multiple="multiple" name="fileUpload"/>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+
 
             </div>
 
@@ -276,9 +310,9 @@
 
             <div class="col-lg-12">
                 <div class="text-center">
-
                 <button type="submit" class="site-btn">등록하기</button>
             </div>
+
 
             </div>
 

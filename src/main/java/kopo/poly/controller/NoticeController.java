@@ -1,6 +1,5 @@
 package kopo.poly.controller;
 
-import kopo.poly.dto.Criteria;
 import kopo.poly.dto.NoticeDTO;
 import kopo.poly.dto.PageDTO;
 import kopo.poly.service.INoticeService;
@@ -151,29 +150,5 @@ public class NoticeController {
         return "/notice/NoticeInfo";
     }
 
-    @RequestMapping(value="/getBoardList.do")
-    public String getBoardList(Model model, Criteria cri) throws Exception {
 
-        log.info(this.getClass().getName() + ".NoticeList start!");
-
-        List<NoticeDTO> rList = noticeService.getNoticeList();
-
-        if (rList == null) {
-            rList = new ArrayList<>();
-
-        }
-        for (int i = 0; i < rList.size(); i++) {
-            NoticeDTO rDTO = rList.get(i);
-            log.info(rDTO.getNotice_seq());
-            log.info(rDTO.getEmail());
-            log.info(rDTO.getTitle());
-            log.info(rDTO.getContents());
-        }
-
-        model.addAttribute("rList", rList);
-        model.addAttribute("pageMaker", new PageDTO(cri, 123));
-
-        log.info(this.getClass().getName() + ".NoticeList end!");
-        return "/notice/NoticeBoardList";
-    }
 }

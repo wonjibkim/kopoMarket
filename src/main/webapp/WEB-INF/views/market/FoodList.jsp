@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="kopo.poly.dto.NoticeDTO" %>
 <%@ page import="kopo.poly.util.CmmUtil" %>
 <%@ page import="java.util.List" %>
@@ -6,7 +6,7 @@
 <%@ page import="java.util.ArrayList" %>
 
 <%
-//    session.setAttribute("SESSION_USER_ID", "USER01");
+    //    session.setAttribute("SESSION_USER_ID", "USER01");
 
     List<FoodDTO> rList = (List<FoodDTO>) request.getAttribute("rList");
 
@@ -27,7 +27,7 @@
 
         //상세보기 이동
         function doDetail(p_num) {
-            location.href = "/market/FoodEditInfo?p_num="+ p_num;
+            location.href = "/market/FoodEditInfo?p_num=" + p_num;
         }
 
         //해당 등록음식 삭제하기
@@ -35,22 +35,43 @@
             console.log(p_num);
             $.ajax({
                 type: 'POST',
-                url :  "/market/FoodDelete",
-                data : {"p_num" : p_num},//보낼 데이터의 키값과 value값
+                url: "/market/FoodDelete",
+                data: {"p_num": p_num},//보낼 데이터의 키값과 value값
                 dataType: "json",
                 success(result) {
                     console.log(result);
-                    if(result==null) {
+                    if (result == null) {
+                        console.log(result)
                         alert("실패했습니다.")
-                    } else{
+                    } else {
+                        console.log(result)
                         $('#test').empty();
                         var str = '';
-                        for(var i=0; i<result.length;i++) {
-                            str += '<tr><td class="shoping__cart__item"> <h5><a href="javascript:doDetail(' + result[i].p_num +');">' + result[i].p_name + '</a> </h5></td>' +
-                                ' <td class="shoping__cart__price">' +result[i].p_price+' <td class="shoping__cart__total">'+ result[i].p_sell + '<td>' +
-                                '<td class="shoping__cart__total">'+result[i].p_period + '<td>' +
-                                '<td class="shoping__cart__total">' + result[i].p_ancestry +'<td>'+
-                                '<a href="javascript:FoodDelete('+result[i].p_num +');"><span class="icon_close"></span></a></td><tr>'
+                        for (var i = 0; i < result.length; i++) {
+                            str +=
+                                '<tr><td class="shoping__cart__item">' +
+
+
+                                '<img style="width: 150px; height: 150px; object-fit: cover;" src="'+
+                                result[i].p_filePath + '/' + result[i].p_fileName +
+                                '" alt="">'
+
+
+
+
+                                +
+                                '<h5><a href="javascript:doDetail('+result[i].food_num
+                                +');">'+ result[i].p_name + '</a></h5></td>'
+
+
+                                + '<td class="shoping__cart__price">' + result[i].p_price + '</td>'
+                                + '<td class="shoping__cart__price">' +       result[i].p_sell   +'</td>'
+                                + '<td class="shoping__cart__price">' +       result[i].p_period   +'</td>'
+                                + '<td class="shoping__cart__price">' +       result[i].p_ancestry   +'</td>'
+
+                                +'<td class="shoping__cart__item__close"><a href="javascript:FoodDelete('
+                                +result[i].p_num
+                                +');"><span class="icon_close"></span></a></td></tr>'
 
                         }
                         $('#test').append(str);
@@ -61,7 +82,6 @@
 
 
     </script>
-
 
 
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
@@ -86,7 +106,7 @@
     <link rel="stylesheet" href="/comport-master/assets/css/style.css">
 
 
-<%--    js--%>
+    <%--    js--%>
     <script src="ogani-master/js/jquery-3.3.1.min.js"></script>
     <script src="ogani-master/js/bootstrap.min.js"></script>
     <script src="ogani-master/js/jquery.nice-select.min.js"></script>
@@ -96,16 +116,21 @@
     <script src="ogani-master/js/owl.carousel.min.js"></script>
     <script src="ogani-master/js/main.js"></script>
 
-
+    <style type="text/css">
+        shoping__cart__item > img {
+            width: 300px;
+            height: 150px;
+            object-fit: cover;
+        }
+    </style>
 
 
 </head>
 <body>
 <!-- Header Section Begin -->
-<%@include file="../includes/header.jsp"%>
+<%@include file="../includes/header.jsp" %>
 
 <%--<table border="1" width="100%">--%>
-
 
 
 <%--<section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">--%>
@@ -146,10 +171,6 @@
                         </thead>
 
 
-
-
-
-
                         <tbody id="test">
 
                         <%
@@ -162,48 +183,50 @@
 
                         %>
 
-                        <%--                            <img src="img/cart/cart-1.jpg" alt=""> 이미지 넣기--%>
+                        <%--                            <img src="<%=rDTO.getP_filePath()%>" alt=""> 이미지 넣기--%>
                         <tr>
-                            <td class="shoping__cart__item"> <h5>
-                                <a href="javascript:doDetail('<%=CmmUtil.nvl(rDTO.getP_num())%>');">
-                                        <%=CmmUtil.nvl(rDTO.getP_name())%> </a> </h5></td>
+                            <td class="shoping__cart__item">
+                                <img style="width: 150px; height: 150px; object-fit: cover;"
+                                     src="<%=rDTO.getP_filePath()%>/<%=rDTO.getP_fileName()%>" alt="">
+                                <h5>  <a href="javascript:doDetail('<%=CmmUtil.nvl(rDTO.getP_num())%>');"> <%=CmmUtil.nvl(rDTO.getP_name())%> </a> </h5>
+                            </td>
 
-                            <td class="shoping__cart__price"> <%=CmmUtil.nvl(rDTO.getP_price())%></td>
+                            <td class="shoping__cart__price"><%=CmmUtil.nvl(rDTO.getP_price())%>
+                            </td>
 
-<%--                            수량 text 상자로--%>
+                            <%--                            수량 text 상자로--%>
 
-<%--                            <td class="shoping__cart__quantity">--%>
-<%--                                <div class="quantity">--%>
-<%--                                    <div class="pro-qty">--%>
-<%--                                        <input type="text" value="<%=CmmUtil.nvl(rDTO.getP_sell())%>">--%>
-<%--                                    </div>--%>
-<%--                                </div>--%>
-<%--                            </td>--%>
+                            <%--                            <td class="shoping__cart__quantity">--%>
+                            <%--                                <div class="quantity">--%>
+                            <%--                                    <div class="pro-qty">--%>
+                            <%--                                        <input type="text" value="<%=CmmUtil.nvl(rDTO.getP_sell())%>">--%>
+                            <%--                                    </div>--%>
+                            <%--                                </div>--%>
+                            <%--                            </td>--%>
 
-                            <td class="shoping__cart__total"><%=CmmUtil.nvl(rDTO.getP_sell())%></td>
+                            <td class="shoping__cart__total"><%=CmmUtil.nvl(rDTO.getP_sell())%>
+                            </td>
 
-                            <td class="shoping__cart__total"><%= rList.get(i).getP_period()%></td>
+                            <td class="shoping__cart__total"><%= rList.get(i).getP_period()%>
+                            </td>
 
-                            <td class="shoping__cart__total"><%= rList.get(i).getP_ancestry()%></td>
+                            <td class="shoping__cart__total"><%= rList.get(i).getP_ancestry()%>
+                            </td>
 
                             <td class="shoping__cart__item__close">
 
-<%--                                <a href="javascript:doDetail('<%=CmmUtil.nvl(rDTO.getP_num())%>');">--%>
-<%--                                    <%=CmmUtil.nvl(rDTO.getP_name())%> </a>--%>
-    <a href="javascript:FoodDelete('<%=CmmUtil.nvl(rDTO.getP_num())%>');">
-        <span class="icon_close"></span>
-    </a>
-
-
+                                <%--                                <a href="javascript:doDetail('<%=CmmUtil.nvl(rDTO.getP_num())%>');">--%>
+                                <%--                                    <%=CmmUtil.nvl(rDTO.getP_name())%> </a>--%>
+                                <a href="javascript:FoodDelete('<%=CmmUtil.nvl(rDTO.getP_num())%>');">
+                                    <span class="icon_close"></span>
+                                </a>
 
 
                             </td>
 
 
-<%--                            <a href="javascript:doDetail('<%=CmmUtil.nvl(rDTO.getP_num())%>');">--%>
-<%--                                <%=CmmUtil.nvl(rDTO.getP_name())%> </a>--%>
-
-
+                            <%--                            <a href="javascript:doDetail('<%=CmmUtil.nvl(rDTO.getP_num())%>');">--%>
+                            <%--                                <%=CmmUtil.nvl(rDTO.getP_name())%> </a>--%>
 
 
                         </tr>
@@ -214,28 +237,23 @@
                     </table>
 
 
-
-
-
                 </div>
             </div>
         </div>
 
 
-
-
-
-
         <div class="row">
             <div class="col-lg-12">
                 <div class="shoping__cart__btns">
-<%--                    <a href="/market/insert" class="primary-btn cart-btn">물품등록</a>--%>
-                    <a href="/market/FoodReg"  class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
+                    <%--                    <a href="/market/insert" class="primary-btn cart-btn">물품등록</a>--%>
+                    <a href="/market/FoodReg" class="primary-btn cart-btn cart-btn-right"><span
+                            class="icon_loading"></span>
                         물품등록</a>
                 </div>
                 <div class="shoping__cart__btns">
                     <%--                    <a href="/market/insert" class="primary-btn cart-btn">물품등록</a>--%>
-                    <a href="/market/FoodListShelf"  class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
+                    <a href="/market/FoodListShelf" class="primary-btn cart-btn cart-btn-right"><span
+                            class="icon_loading"></span>
                         유통기한 지난 품목 관리</a>
                 </div>
 
@@ -270,16 +288,8 @@
 <!-- Shoping Cart Section End -->
 
 
-
-
-
-
-
-
-
-
 <!-- Footer Section Begin -->
-<%@include file="../includes/footer.jsp"%>
+<%@include file="../includes/footer.jsp" %>
 <!-- Footer Section End -->
 </body>
 </html>

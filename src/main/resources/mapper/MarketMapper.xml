@@ -6,9 +6,9 @@
 
     <insert id="FoodInsert" parameterType="FoodDTO">
         INSERT INTO food
-        (P_NAME,P_PRICE,P_SELL,P_INFO,P_PERIOD,P_CATEGORY,P_ENROLL,P_FILEPATH,P_FILENAME,P_DISCOUNT,P_ANCESTRY,P_WEIGHT)
+        (P_NAME,P_PRICE,P_SELL,P_INFO,P_PERIOD,P_CATEGORY,P_ENROLL,P_FILEPATH,P_FILENAME,P_DISCOUNT,P_ANCESTRY,P_WEIGHT,MARKET_SEQ)
         VALUES
-            (#{p_name},#{p_price},#{p_sell},#{p_info},#{p_period},#{p_category},SYSDATE(),#{p_filePath},#{p_fileName},#{p_discount},#{p_ancestry},#{p_weight})
+            (#{p_name},#{p_price},#{p_sell},#{p_info},#{p_period},#{p_category},SYSDATE(),#{p_filePath},#{p_fileName},#{p_discount},#{p_ancestry},#{p_weight},#{market_seq})
     </insert>
 
 
@@ -127,6 +127,17 @@
 
 
     </insert>
+
+
+<!--    바코드로 수량뺴기 쿼리-->
+    <update id="update_barcode" parameterType="FoodDTO">
+        UPDATE food set P_SELL = CAST(P_SELL as unsigned) -1
+        WHERE P_BARCODE=#{p_barcode}
+    </update>
+
+
+
+
 
 
 

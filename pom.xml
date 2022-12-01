@@ -103,6 +103,13 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
+<!--        카카오페이-->
+        <dependency>
+            <groupId>kr.co.linkhub</groupId>
+            <artifactId>kakaocert-sdk</artifactId>
+            <version>2.52.0</version>
+        </dependency>
+
 </dependencies>
     <build>
         <plugins>

@@ -30,4 +30,6 @@ public interface IMarketService {
 
     int InsertFoodInCart(CartDTO cDTO) throws Exception; // 카트에 넣기
 
+
+    void update_barcode(FoodDTO fDTO); // 바코드 값 인식 insert
 }

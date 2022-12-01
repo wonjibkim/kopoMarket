@@ -60,6 +60,7 @@ public class MarketService implements IMarketService {
         }
 
         @Override // 수정
+        @Transactional
         public void foodUp(FoodDTO fDTO) throws Exception {
 
                 log.info(this.getClass().getName() + "foodUp start!");
@@ -71,6 +72,7 @@ public class MarketService implements IMarketService {
         }
 
         @Override// 삭제
+        @Transactional
         public void FoodDelete(FoodDTO pDTO) throws Exception {
 
                 log.info(getClass().getName()+ "FoodDelete Start");
@@ -89,6 +91,7 @@ public class MarketService implements IMarketService {
         }
 
         @Override // 삭제하기
+        @Transactional
         public void FoodDeleteShelf() {
 
                 log.info(getClass().getName()+ "FoodDeleteShelf Start");
@@ -154,6 +157,7 @@ public class MarketService implements IMarketService {
         }
 
         @Override
+        @Transactional
         public int InsertFoodInCart(CartDTO cDTO) throws Exception {
 
                 int res = 0;
@@ -184,6 +188,17 @@ public class MarketService implements IMarketService {
 
 
                 return res;
+        }
+
+        @Override //바코드 수량뺴기 쿼리
+        @Transactional
+        public void update_barcode(FoodDTO fDTO) {
+                log.info(getClass().getName() + "BarcodeInsert start");
+
+                marketMapper.update_barcode(fDTO);
+
+
+                log.info(getClass().getName() + "BarcodeInsert end");
         }
 
 

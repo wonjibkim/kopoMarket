@@ -126,7 +126,7 @@
                 lon = position.coords.longitude; // 경도
 
             var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-                message = '<div style="padding:5px;">여기에 계신가요?!</div>'; // 인포윈도우에 표시될 내용입니다
+                message = '<div style="padding:5px;">현위치</div>'; // 인포윈도우에 표시될 내용입니다
 
             // 마커와 인포윈도우를 표시합니다
             displayMarker(locPosition, message);
@@ -225,21 +225,20 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="contact__form__title">
-                    <h2>Leave Message</h2>
+
                 </div>
             </div>
         </div>
         <form action="#">
             <div class="row">
                 <div class="col-lg-6 col-md-6">
-                    <input type="text" placeholder="Your name">
+
                 </div>
                 <div class="col-lg-6 col-md-6">
-                    <input type="text" placeholder="Your Email">
+
                 </div>
                 <div class="col-lg-12 text-center">
-                    <textarea placeholder="Your message"></textarea>
-                    <button type="submit" class="site-btn">SEND MESSAGE</button>
+
                 </div>
             </div>
         </form>
