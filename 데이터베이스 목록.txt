@@ -1,0 +1,142 @@
+스키마 설정 market
+
+CREATE TABLE `cart` (
+  `food_num` int(11) NOT NULL,
+  `user_seq` int(11) NOT NULL,
+  `cart_date` varchar(999) NOT NULL DEFAULT sysdate(),
+  `cart_count` int(11) NOT NULL,
+  `cart_num` int(11) NOT NULL AUTO_INCREMENT,
+  `purchase` varchar(99) DEFAULT NULL,
+  `purchase_date` varchar(99) DEFAULT NULL,
+  PRIMARY KEY (`cart_num`),
+  KEY `user_seq` (`user_seq`),
+  KEY `food_num` (`food_num`),
+  CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`user_seq`) REFERENCES `userinfo` (`USER_SEQ`),
+  CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`food_num`) REFERENCES `food` (`P_NUM`)
+) ENGINE=InnoDB AUTO_INCREMENT=160 DEFAULT CHARSET=utf8mb3
+
+
+CREATE TABLE `comment` (
+  `no` int(11) NOT NULL AUTO_INCREMENT COMMENT '댓글 번호',
+  `bno` int(11) NOT NULL COMMENT '게시물번호',
+  `grp` int(11) NOT NULL COMMENT '댓글이 속한 댓글 번호',
+  `grps` int(11) NOT NULL COMMENT '같은 grp 중에 순서',
+  `grpl` int(11) NOT NULL COMMENT '댓글의 깊이 모댓글이면0, 답글이면 1',
+  `writer` varchar(1000) NOT NULL COMMENT '작성자의 nick',
+  `content` varchar(1000) NOT NULL COMMENT '댓글 작성 내용',
+  `wdate` datetime NOT NULL COMMENT '댓글 작성 시간',
+  PRIMARY KEY (`no`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4
+
+CREATE TABLE `emailcode` (
+  `EMAIL_USER` varchar(100) NOT NULL,
+  `MAIL_CODE` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`EMAIL_USER`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+CREATE TABLE `food` (
+  `P_NUM` int(30) NOT NULL AUTO_INCREMENT,
+  `P_NAME` varchar(30) NOT NULL,
+  `P_PRICE` varchar(30) NOT NULL,
+  `P_SELL` varchar(30) NOT NULL,
+  `P_INFO` varchar(5000) NOT NULL,
+  `P_PERIOD` varchar(30) DEFAULT NULL,
+  `P_CATEGORY` varchar(30) DEFAULT NULL,
+  `P_ENROLL` date DEFAULT sysdate(),
+  `p_fileName` varchar(999) DEFAULT NULL,
+  `p_filePath` varchar(999) NOT NULL,
+  `p_discount` varchar(50) DEFAULT NULL,
+  `p_ancestry` varchar(50) DEFAULT NULL,
+  `p_weight` varchar(50) DEFAULT NULL,
+  `p_barcode` varchar(999) DEFAULT NULL,
+  `market_seq` int(11) NOT NULL,
+  PRIMARY KEY (`P_NUM`),
+  KEY `market_seq` (`market_seq`),
+  CONSTRAINT `food_ibfk_1` FOREIGN KEY (`market_seq`) REFERENCES `marketinfo` (`MARKET_SEQ`)
+) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=utf8mb3
+
+CREATE TABLE `maretprice` (
+  `PRDLST_NM` varchar(999) DEFAULT NULL,
+  `AMT` varchar(999) DEFAULT NULL,
+  `AREA_NM` varchar(999) DEFAULT NULL,
+  `EXAMIN_UNIT` varchar(999) DEFAULT NULL,
+  `price_num` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`price_num`)
+) ENGINE=InnoDB AUTO_INCREMENT=2006 DEFAULT CHARSET=utf8mb3
+
+CREATE TABLE `marketinfo` (
+  `MARKET_SEQ` int(11) NOT NULL AUTO_INCREMENT,
+  `ADDR2_MARKET` varchar(100) NOT NULL,
+  `ADDR1_MARKET` varchar(100) NOT NULL,
+  `NAME_MARKET` varchar(100) NOT NULL,
+  `EMAIL_MARKET` varchar(100) NOT NULL,
+  `PWD_MARKET` varchar(100) NOT NULL,
+  `CNUM_MARKET` varchar(100) NOT NULL,
+  `B_NO` varchar(100) DEFAULT NULL,
+  `START_DT` varchar(100) DEFAULT NULL,
+  `P_NM` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`MARKET_SEQ`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4
+
+CREATE TABLE `marketpasing` (
+  `pasing_num` int(11) NOT NULL AUTO_INCREMENT,
+  `refine_wgs84_lat` varchar(999) NOT NULL,
+  `bizplc_nm` varchar(999) DEFAULT NULL,
+  `refine_wgs84_logt` varchar(999) DEFAULT NULL,
+  `refine_roadnm_addr` varchar(999) DEFAULT NULL,
+  `licensg_de` varchar(999) DEFAULT NULL,
+  PRIMARY KEY (`pasing_num`)
+) ENGINE=InnoDB AUTO_INCREMENT=14217 DEFAULT CHARSET=utf8mb3
+
+
+CREATE TABLE `notice` (
+  `NOTICE_SEQ` int(11) NOT NULL AUTO_INCREMENT,
+  `EMAIL` varchar(100) DEFAULT NULL,
+  `TITLE` varchar(100) DEFAULT NULL,
+  `CONTENTS` varchar(100) DEFAULT NULL,
+  `reply` int(11) DEFAULT NULL,
+  PRIMARY KEY (`NOTICE_SEQ`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4
+
+
+CREATE TABLE `pay` (
+  `user_seq` int(11) DEFAULT NULL,
+  `food_num` int(11) DEFAULT NULL,
+  `cart_count` int(11) DEFAULT NULL,
+  `p_price` int(11) DEFAULT NULL,
+  `pay_date` date DEFAULT sysdate(),
+  `p_name` varchar(90) DEFAULT NULL,
+  `price_sum` int(11) DEFAULT NULL,
+  `purchase` varchar(1) DEFAULT NULL,
+  `pay_seq` int(11) NOT NULL AUTO_INCREMENT,
+  `market_seq` varchar(99) DEFAULT NULL,
+  PRIMARY KEY (`pay_seq`),
+  KEY `user_seq` (`user_seq`),
+  CONSTRAINT `pay_ibfk_1` FOREIGN KEY (`user_seq`) REFERENCES `userinfo` (`USER_SEQ`)
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb3
+
+CREATE TABLE `recipe` (
+  `recipe_name` varchar(1000) DEFAULT NULL,
+  `ingredient` varchar(1000) DEFAULT NULL,
+  `filename` varchar(1000) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+CREATE TABLE `userinfo` (
+  `USER_SEQ` int(11) NOT NULL AUTO_INCREMENT,
+  `EMAIL_USER` varchar(100) NOT NULL,
+  `PWD_USER` varchar(100) NOT NULL,
+  `NAME_USER` varchar(100) DEFAULT NULL,
+  `GENDER` varchar(100) DEFAULT NULL,
+  `AGE_USER` varchar(100) DEFAULT NULL,
+  `TYPE_VEGANISM` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`USER_SEQ`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4
+
+
+
+
+
+
+
+
+
