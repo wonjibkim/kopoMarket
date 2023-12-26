@@ -8,19 +8,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Slf4j
@@ -60,24 +52,33 @@ public class RecipeService implements IRecipeService {
             } else {
                 Elements element = doc.select("div.rec_exp");
 
-                log.info(String.valueOf(element.select("h2.prod_title")));
-
                 Elements recipe_name = element.select("h2.prod_title");
-                element = doc.select("div.text_box");
-                Elements ingredient = element.select("p.mate_list");
 
+                element = doc.select("div.fl.rec_view_img");
+                log.info("이미지 URL : "+element.select("img").attr("src"));
+                String img = element.select("img").attr("src");
+                String filename = "https://2bob.co.kr"+img.substring(img.lastIndexOf("..")+2);
+                log.info(filename);
+
+                element = doc.select("div.text_box");
+
+                Elements ingredient = element.select("p.mate_list");
+                String ingredient2 =CmmUtil.nvl(ingredient.text().trim());
+                String[] Array = ingredient2.split(",");
                 pDTO = new RecipeDTO();
                 pDTO.setRecipe_name(CmmUtil.nvl(recipe_name.text().trim()));
-                pDTO.setIngredient(CmmUtil.nvl(ingredient.text().trim()));
+                pDTO.setFilename(filename);
+                for (int j=0; j<Array.length; j++){
+                    int idx = Array[j].indexOf("(");
+                    log.info(recipe_name.text().trim());
+                    log.info(Array[j].substring(0, idx).trim());
+                    pDTO.setIngredient(Array[j].substring(0, idx).trim());
 
-                log.info(CmmUtil.nvl(ingredient.text().trim()));
-                log.info(recipe_name.text().trim());
+                    RecipeMapper.InsertRecipeInfo(pDTO);
 
-//                element = doc.select("div.rec_view_top clr");
-//                log.info(element.select("div.fl rec_view_img").attr("abs:src"));
-//                String img = element.select("div.fl rec_view_img").attr("abs:src");
-//                String filename = img.substring(img.lastIndexOf("/")+1);
-//
+
+                }
+                res++;
 //                HttpURLConnection conn = null;
 //
 //                URL imgUrl;
@@ -91,8 +92,6 @@ public class RecipeService implements IRecipeService {
 //                BufferedImage buffImg = ImageIO.read(conn.getInputStream());
 //                FileOutputStream file = new FileOutputStream(path + filename + ".jpg");
 //                ImageIO.write(buffImg, "jpg",file);
-//                pDTO.setFilename(filename);
-                res += RecipeMapper.InsertRecipeInfo(pDTO);
                 i++;
             }
         }
@@ -104,13 +103,13 @@ public class RecipeService implements IRecipeService {
     }
 
     @Override
-    public List<RecipeDTO> getRecipeInfo(RecipeDTO pDTO) throws Exception {
+    public List<RecipeDTO> getRecipeName() throws Exception {
 
         // 로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악하기 용이하다.)
-        log.info(this.getClass().getName() + ".getMovieInfo Start!");
+        log.info(this.getClass().getName() + ".getRecipeName Start!");
 
         // DB에서 조회하기
-        List<RecipeDTO > rList = RecipeMapper.getRecipeInfo(pDTO);
+        List<RecipeDTO > rList = RecipeMapper.getRecipeName();
 
         // DB 조회 결과가 없다면, NullPointer 에러 방지를 위해
         // 데이터가 존재하는 않는 객체로 메모리에 올리기
@@ -119,8 +118,20 @@ public class RecipeService implements IRecipeService {
         }
 
         // 로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악하기 용이하다.)
-        log.info(this.getClass().getName() + ".getMovieInfo End!");
+        log.info(this.getClass().getName() + ".getRecipeName End!");
 
         return rList;
+    }
+    public List<RecipeDTO> getRecipe(String name) throws Exception{
+
+        log.info(this.getClass().getName() + ".getRecipe start!");
+        log.info(name);
+        return RecipeMapper.getRecipe(name);
+    }
+    public List<RecipeDTO> getRecipeInfo(String name) throws Exception{
+
+        log.info(this.getClass().getName() + ".getRecipeInfo start!");
+        log.info(name);
+        return RecipeMapper.getRecipeInfo(name);
     }
 }

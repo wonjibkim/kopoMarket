@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "=//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kopo.poly.persistance.mapper.IPayMapper">
+
+
+    <select id="getPayKaKao"  resultType="kPayDTO">
+        select pay_seq,EMAIL_USER,SUM(price_sum) from pay
+    left join userinfo c on pay.user_seq = c.USER_SEQ where pay.purchase=0;
+    </select>
+
+    <select id="getSumprice" resultType="String">
+        select SUM(price_sum) from pay
+         where purchase=0;
+    </select>
+
+    <update id="PayEnd">
+        UPDATE PAY SET purchase=1;
+    </update>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

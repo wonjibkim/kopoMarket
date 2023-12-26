@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "=//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kopo.poly.persistance.mapper.IMapMapper">
+
+    <select id="MartMap" resultType="MarketInfoDTO">
+        SELECT ADDR1_MARKET,NAME_MARKET FROM marketinfo
+    </select>
+
+
+    <delete id="marketapide">
+        DELETE  FROM MARKETPASING
+
+    </delete>
+
+
+    <insert id="maketInsertInfo" parameterType="MarketPasingDTO">
+        INSERT INTO MARKETPASING
+        (
+            REFINE_WGS84_LAT,REFINE_WGS84_LOGT,
+            BIZPLC_NM,LICENSG_DE,REFINE_ROADNM_ADDR
+        )
+        VALUES
+            (
+                #{refine_wgs84_lat}, #{refine_wgs84_logt},
+                #{bizplc_nm},#{licensg_de},#{refine_roadnm_addr}
+            )
+    </insert>
+
+
+    <select id="pasingMap" resultType="MarketPasingDTO">
+        SELECT    REFINE_WGS84_LAT,REFINE_WGS84_LOGT,
+                  BIZPLC_NM,REFINE_ROADNM_ADDR,LICENSG_DE
+        FROM MARKETPASING
+    </select>
+
+
+
+</mapper>

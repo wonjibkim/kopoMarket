@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "=//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kopo.poly.persistance.mapper.IPageMapper">
+    <!-- 게시글 리스트 조회 -->
+    <select id="noticeList" resultType="hashmap" parameterType="hashmap">
+        <![CDATA[
+        SELECT *
+        FROM notice
+        ORDER BY NOTICE_SEQ DESC
+            LIMIT #{pageStart}, #{perPageNum}
+        ]]>
+    </select>
+    <select id="noticeSearchList" resultType="hashmap" parameterType="hashmap">
+        <![CDATA[
+        SELECT *
+        FROM notice
+        WHERE TITLE LIKE  CONCAT('%',#{keyword},'%') OR CONTENTS LIKE  CONCAT('%',#{keyword},'%')
+        ORDER BY NOTICE_SEQ DESC
+            LIMIT #{pageStart}, #{perPageNum}
+        ]]>
+    </select>
+    <select id="noticeListCnt" resultType="int">
+        SELECT count(*)
+        FROM notice
+    </select>
+    <select id="noticeSearchCnt" resultType="int" parameterType="String">
+        SELECT count(*)
+        FROM notice
+        WHERE TITLE LIKE CONCAT('%',#{keyword},'%') OR CONTENTS LIKE CONCAT('%',#{keyword},'%')
+    </select>
+
+    <select id="ShopList" resultType="hashmap" parameterType="hashmap">
+        <![CDATA[
+        SELECT *
+        FROM FOOD
+        ORDER BY P_NUM DESC
+            LIMIT #{pageStart}, #{perPageNum}
+        ]]>
+    </select>
+    <select id="ShopSearchList" resultType="hashmap" parameterType="hashmap">
+        <![CDATA[
+        SELECT *
+        FROM FOOD
+        WHERE P_NAME LIKE  CONCAT('%',#{keyword},'%') OR P_CATEGORY LIKE CONCAT('%',#{keyword},'%')
+        ORDER BY P_NUM DESC
+            LIMIT #{pageStart}, #{perPageNum}
+        ]]>
+    </select>
+    <select id="ShopListCnt" resultType="int">
+        SELECT count(*)
+        FROM FOOD
+    </select>
+    <select id="ShopSearchCnt" resultType="int" parameterType="String">
+        SELECT count(*)
+        FROM FOOD
+        WHERE P_NAME LIKE CONCAT('%',#{keyword},'%') OR P_CATEGORY LIKE CONCAT('%',#{keyword},'%')
+    </select>
+
+    <select id="priceListCnt" resultType="int">
+        SELECT count(*)
+        FROM MARETPRICE
+    </select>
+
+    <select id="priceList" resultType="hashmap" parameterType="hashmap">
+        <![CDATA[
+        SELECT *
+        FROM MARETPRICE
+        ORDER BY PRICE_NUM DESC
+            LIMIT #{pageStart}, #{perPageNum}
+        ]]>
+    </select>
+
+    <select id="priceSearchCnt" resultType="int" parameterType="String">
+        SELECT count(*)
+        FROM MARETPRICE
+        WHERE PRDLST_NM LIKE CONCAT('%',#{keyword},'%')
+    </select>
+
+    <select id="priceSearchList" resultType="hashmap" parameterType="hashmap">
+        <![CDATA[
+        SELECT *
+        FROM MARETPRICE
+        WHERE PRDLST_NM LIKE CONCAT('%',#{keyword},'%')
+        ORDER BY PRICE_NUM DESC
+            LIMIT #{pageStart}, #{perPageNum}
+        ]]>
+    </select>
+
+
+</mapper>

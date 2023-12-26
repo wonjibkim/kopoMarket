@@ -13,7 +13,7 @@ String msg = CmmUtil.nvl((String)request.getAttribute("msg"));
 <script type="text/javascript">
 
 	alert("<%=msg%>");
-	top.location.href="/notice/NoticeList";
+	top.location.href="/notice/noticeboardlist";
 		
 </script>
 </head>

@@ -65,7 +65,7 @@
 
                 <form id="frm" name="frm" method="post" action="/notice/insertBoard">
                     제목<input type="text"  name="title" cols="100" rows="1"  placeholder="제목"  required>
-                    작성자 <input type="text" name="email" readonly value="helper">
+                    작성자 <input type="text" name="email" readonly value="<%=session.getAttribute("email")%>">
                     <br> <br>
                     문의글 내용<textarea name="contents" cols="100" rows="10"  placeholder="문의글 내용"  required></textarea>
 

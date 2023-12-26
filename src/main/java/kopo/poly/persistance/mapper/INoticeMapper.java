@@ -15,5 +15,9 @@ public interface INoticeMapper {
 
    NoticeDTO getNoticeInfo(NoticeDTO pDTO) throws Exception;
 
+   void noticeDelete(String nSeq) throws Exception;
+
+   void noticeUpdate(NoticeDTO nDTO) throws Exception;
+
 
 }

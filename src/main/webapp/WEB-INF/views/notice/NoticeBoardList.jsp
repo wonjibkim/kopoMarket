@@ -1,16 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="kopo.poly.dto.NoticeDTO" %>
-<%@ page import="kopo.poly.util.CmmUtil" %>
-<%
-    List<NoticeDTO> rList = (List<NoticeDTO>) request.getAttribute("rList");
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-    if (rList == null) {
-        rList = new ArrayList<NoticeDTO>();
-
-    }
-%>
 
 <!DOCTYPE html>
 <html lang="zxx">
@@ -209,13 +199,17 @@
         }
 
     </style>
+    <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
     <script>
-    function doDetail(seq) {
-    location.href = "/noticeinfo?nSeq=" + seq;
-    }
+        function doDetail(seq) {
+            location.href = "/notice/noticeinfo?nSeq=" + seq;
+        }
+        function doSearch() {
+            var keyword = document.getElementById("search").value;
+            console.log(keyword);
+            location.href = "/notice/noticeboardlist?keyword=" + keyword;
+        }
     </script>
-
-
 
 </head>
 
@@ -251,7 +245,7 @@
                     <div class="search-wrap">
                         <label for="search" class="blind">공지사항 내용 검색</label>
                         <input id="search" type="search" name="" placeholder="검색어를 입력해주세요." value="">
-                        <button type="submit" class="btn btn-dark">검색</button>
+                        <input type="button" class="btn btn-dark" value="검색" onclick="doSearch()"/>
                     </div>
                 </form>
             </div>
@@ -270,33 +264,33 @@
                 </tr>
                 </thead>
                 <tbody>
-                <%
-                    for (int i = 0; i < rList.size(); i++) {
-                        NoticeDTO rDTO = rList.get(i);
-
-                        if (rDTO == null) {
-                            rDTO = new NoticeDTO();
-                        }
-
-                %>
-                <tr>
-                    <td>
-                        <%=CmmUtil.nvl(rDTO.getNotice_seq())%>
-                    </td>
-                    <td>
-                        <a href="javascript:doDetail('<%=CmmUtil.nvl(rDTO.getNotice_seq())%>');">
-                            <%=CmmUtil.nvl(rDTO.getTitle()) %>
-                        </a>
-                    </td>
-                    <td>
-                    <%=CmmUtil.nvl(rDTO.getEmail()) %>
-                    </td>
-                </tr>
-                <% }%>
+                <c:forEach items="${list}" var="data">
+                    <tr>
+                        <td>${data.NOTICE_SEQ}</td>
+                        <td><a href="javascript:doDetail('${data.NOTICE_SEQ}');">${data.TITLE}</a></td>
+                        <td>${data.EMAIL}</td>
+                    </tr>
+                </c:forEach>
                 </tbody>
             </table>
+            <div class="product__pagination">
+                <ul class="paging">
+                    <c:if test="${paging.prev}">
+                        <span><a href='<c:url value="/notice/noticeboardlist?page=${paging.startPage-1}"/>'>이전</a></span>
+                    </c:if>
+                    <c:forEach begin="${paging.startPage}" end="${paging.endPage}" var="num">
+                        <span><a href='<c:url value="/notice/noticeboardlist?page=${num}"/>'>${num}</a></span>
+                    </c:forEach>
+                    <c:if test="${paging.next && paging.endPage>0}">
+                        <span><a href='<c:url value="/notice/noticeboardlist?page=${paging.endPage+1}"/>'>다음</a></span>
+                    </c:if>
+                </ul>
+            </div>
             <div class="text-center">
+                <%if(session.getAttribute("seq")!=null){%>
                 <button style="float: right" type="submit" type="button" onclick="location.href='/notice/noticeboard'" class="template-btn">문의하기</button>
+                <%}%>
+
             </div>
         </div>
     </div>
@@ -307,6 +301,44 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Footer Section Begin -->
+<%@include file="../includes/footer.jsp"%>
+<!-- Footer Section End -->
+
+<!-- Js Plugins -->
+<script src="ogani-master/js/jquery-3.3.1.min.js"></script>
+<script src="ogani-master/js/bootstrap.min.js"></script>
+<script src="ogani-master/js/jquery.nice-select.min.js"></script>
+<script src="ogani-master/js/jquery-ui.min.js"></script>
+<script src="ogani-master/js/jquery.slicknav.js"></script>
+<script src="ogani-master/js/mixitup.min.js"></script>
+<script src="ogani-master/js/owl.carousel.min.js"></script>
+<script src="ogani-master/js/main.js"></script>
+
+
+
+</body>
+
+</html>
 
 
 

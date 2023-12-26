@@ -9,9 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Service("MarketInfoService")
 @Slf4j
 @RequiredArgsConstructor
+@Service("MarketInfoService")
 public class MarketInfoService implements IMarketInfoService {
 
         private final IMarketInfoMapper marketInfoMapper;
@@ -51,9 +51,40 @@ public class MarketInfoService implements IMarketInfoService {
                 return res;
         }
 
+
+        /** 마켓 로그인을 위한 아이디 비밀번호 확인 */
         @Override
-        public int getMarketLoginCheck(MarketInfoDTO mDTO) throws Exception {
-                return 0;
+        public MarketInfoDTO getMarketLoginCheck(MarketInfoDTO mDTO) throws Exception {
+
+                //로그인 성공:1
+                //실패 :0
+                int res = 0;
+
+                //로그인을 위해 아이디와 비밀번호가 일치하는지 확인하기 위한 mapper호출
+                MarketInfoDTO rDTO = marketInfoMapper.getMarketLoginCheck(mDTO);
+
+                if (rDTO == null){
+                        rDTO = new MarketInfoDTO();
+                }
+
+                /*
+                * ****************
+                * 로그인 성공 여부 체크 시작 !!
+                * @@@@@@@@@@@@@@@@@
+                *
+                * userInfoMapper 로 부터 Select 쿼리의 결과로 회원아이디를 받아왔다면 로그인 성공!!
+                *
+                * DTO의 변수에 값이 있는지 확인하기 처리속도 측면에서 가장 좋은 방법은 변수의 길이를 가져오는 것이다,
+                * 따라서 .length() 함수를 통해 회원아이디의 글자수를 가져와 0보다 큰지 비교한다.
+                * 0보다 크다면, 글자가 존재하는 것이기 때문에 값이 존재한다.
+                * */
+                if (CmmUtil.nvl(rDTO.getEmail_market()).length() > 0) {
+                        res = 1;
+                }
+                /* ##############
+                *  로그인 성공 여부 체크 끝
+                *  #############*/
+                return rDTO;
         }
 
 }

@@ -15,6 +15,7 @@ public class UserInfoDTO {
     private String gender; //유저 성별
     private String age_user; //유저 나이
     private String type_veganism; //채식타입
+    private int res;
 
     // 회원가입시, 중복가입을 방지 위해 사용할 변수
     // DB를 조회해서 회원이 존재하면 Y값을 반환함

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="kopo.poly.persistance.mapper.ICommentMapper">
+
+	<!-- 댓글 쓰기 -->
+	<insert id="picture_reply_write" parameterType="CommentDTO">
+		insert into comment
+		values(0, #{bno}, #{grp}, 0, 0, #{writer}, #{content}, now())
+	</insert>
+
+	<!-- 모댓글일경우 no, grp 일치하게 함 -->
+	<update id="picture_reply_check" parameterType="CommentDTO">
+		update comment set grp=#{grp}
+		where no != grp
+	</update>
+
+	<!-- 모댓글이 삭제된 댓글일때 그에 딸린 답글들이 모두삭제되면 테이블에서 완전히 삭제한다 -->
+	<delete id="picture_reply_delete_after_rereply_delete" parameterType="CommentDTO">
+		delete from comment
+		where content="" and grp=#{grp}
+	</delete>
+
+	<!-- 답글 쓰기 -->
+	<insert id="picture_rereply_write" parameterType="CommentDTO">
+		insert into comment
+		values(0, #{bno}, #{grp}, 0, #{grpl}, #{writer}, #{content}, now())
+	</insert>
+
+	<!-- p_board에 댓글수 증가 -->
+	<update id="picture_reply_up" parameterType="PictureDTO">
+		update notice set reply=reply+1
+		where NOTICE_SEQ=#{no}
+	</update>
+
+	<!-- 댓글 리스트 가져오기 -->
+	<select id="picutre_replyList" parameterType="CommentDTO" resultType="CommentDTO">
+		select *
+		from comment r
+		where r.bno = #{bno}
+		order by grp asc, grps desc
+	</select>
+
+
+	<!-- 댓글 추가/삭제시 댓글 갯수 가져오기 -->
+	<select id="picture_reply_count" parameterType="PictureDTO" resultType="PictureDTO">
+		select reply
+		from notice
+		where NOTICE_SEQ=#{no}
+	</select>
+
+	<!-- 모댓글의 답글수를 카운트 -->
+	<select id="picture_count_rereply" parameterType="CommentDTO" resultType="int">
+		select count(no)
+		from comment
+		where no != #{no} and grp = #{no}
+	</select>
+
+	<!-- 답글수를 카운트 -->
+	<select id="picture_count_rereply_fromrereply" parameterType="CommentDTO" resultType="int">
+		select count(no)
+		from comment
+		where no != #{grp} and grp = #{grp}
+	</select>
+
+	<!-- 모댓글 삭제 - 답글 없음 -->
+	<delete id="picture_reply_delete" parameterType="CommentDTO">
+		delete from comment
+		where no=#{no}
+	</delete>
+
+	<!-- 모댓글 삭제 - 답글 있음 -->
+	<update id="picture_reply_not_delete" parameterType="CommentDTO">
+		update comment set content=""
+		where no=#{no}
+	</update>
+
+	<!-- p_board에 댓글수 감소 -->
+	<update id="picture_reply_down" parameterType="PictureDTO">
+		update notice set reply=reply-1
+		where NOTICE_SEQ=#{no}
+	</update>
+
+	<select id="p_reply_max_no" resultType="int">
+		select max(no)
+		from comment
+	</select>
+
+	<update id="picture_reply_modify" parameterType="CommentDTO">
+		update comment set content = #{content}
+		where no = #{no}
+	</update>
+	
+  </mapper>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

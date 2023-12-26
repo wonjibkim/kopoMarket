@@ -50,5 +50,15 @@ public class NoticeService implements INoticeService {
                 return noticeMapper.getNoticeInfo(pDTO);
 
         }
+
+        @Override
+        public void noticeDelete(String nSeq) throws Exception {
+                noticeMapper.noticeDelete(nSeq);
+        }
+
+        @Override
+        public void noticeUpdate(NoticeDTO nDTO) throws Exception {
+                noticeMapper.noticeUpdate(nDTO);
+        }
 }
 

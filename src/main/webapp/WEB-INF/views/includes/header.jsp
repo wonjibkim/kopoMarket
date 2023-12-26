@@ -53,10 +53,10 @@
                             </ul>
                         </div>
                         <div class="header__top__right__auth">
-                            <%if(session.getAttribute("SS_USER_ID") == null){%>
-                            <a href="/signup/login"><i class="fa fa-user"></i> Login</a>
+                            <%if((session.getAttribute("seq") == null) && (session.getAttribute("market_seq") == null)){%>
+                            <a href="/signup/SignupMain"><i class="fa fa-user"></i> Login</a>
                             <%}else{%>
-                            <a href="/signup/MyPage"><i class="fa fa-user"></i> Mypage</a>
+                            <a href="/login/MyPage"><i class="fa fa-user"></i> Mypage</a>
                             <%}%>
                         </div>
                     </div>
@@ -74,28 +74,40 @@
             <div class="col-lg-6">
                 <nav class="header__menu">
                     <ul>
-                        <li class="active"><a href="/ogani-master/index.html">Home</a></li>
-                        <li><a href="/ogani-master/shop-grid.html">Shop</a></li>
-                        <li><a href="#">Pages</a>
-                            <ul class="header__menu__dropdown">
-                                <li><a href="/ogani-master/shop-details.html">Shop Details</a></li>
-                                <li><a href="/ogani-master/shoping-cart.html">Shoping Cart</a></li>
-                                <li><a href="/ogani-master/checkout.html">Check Out</a></li>
-                                <li><a href="/ogani-master/blog-details.html">Blog Details</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="/ogani-master/blog.html">Blog</a></li>
-                        <li><a href="/ogani-master/contact.html">Contact</a></li>
+                        <li class="active"><a href="/market/index">Home</a></li>
+                        <li><a href="/market/ShopList">Shop</a></li>
+                        <%--                        <li><a href="#">Pages</a>--%>
+                        <%--                            <ul class="header__menu__dropdown">--%>
+                        <%--                                <li><a href="/ogani-master/shop-details.html">Shop Details</a></li>--%>
+                        <%--                                <li><a href="/ogani-master/shoping-cart.html">Shoping Cart</a></li>--%>
+                        <%--                                <li><a href="/ogani-master/checkout.html">Check Out</a></li>--%>
+                        <%--                                <li><a href="/ogani-master/blog-details.html">Blog Details</a></li>--%>
+                        <%--                            </ul>--%>
+                        <%--                        </li>--%>
+                        <li><a href="/notice/noticeboardlist">Service center</a></li>
+                        <li><a href="/map/MartMap">MartMap</a></li>
+                        <li><a href="/map/PasingMap">PasingMap</a></li>
+                        <li><a href="/price/list">Price List</a></li>
+                        <%if(session.getAttribute("seq") != null){%>
+                        <li><a href="/Cart/BarCodeCart">BarCodeCart</a></li>
+                        <li><a href="/Calendar/pu_full">pu_full</a></li>
+                        <%}%>
+                        <%if(session.getAttribute("market_seq") != null){%>
+                        <li><a href="/market/FoodList">Food List</a></li>
+                        <li><a href="/market/update_barcode">Update Barcode</a></li>
+                        <li><a href="/Calendar/sell_full">sell_full</a></li>
+                        <%}%>
                     </ul>
                 </nav>
             </div>
             <div class="col-lg-3">
                 <div class="header__cart">
                     <ul>
-                        <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                        <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                        <%if(session.getAttribute("seq") != null){%>
+                        <li><a href="/Cart/cartList"><i class="fa fa-shopping-bag"></i></a></li>
+                        <%}%>
                     </ul>
-                    <div class="header__cart__price">item: <span>$150.00</span></div>
+                    <%--                    <div class="header__cart__price">item: <span>$150.00</span></div>--%>
                 </div>
             </div>
         </div>
@@ -129,16 +141,22 @@
                     </ul>
                 </div>
             </div>
+            <script>
+                function doSearch2() {
+                    var keyword = document.getElementById("search").value;
+                    location.href = "/market/ShopList?keyword=" + keyword;
+                }
+            </script>
             <div class="col-lg-9">
                 <div class="hero__search">
                     <div class="hero__search__form">
-                        <form action="#">
+                        <form action="">
                             <div class="hero__search__categories">
                                 All Categories
                                 <span class="arrow_carrot-down"></span>
                             </div>
-                            <input type="text" placeholder="What do yo u need?">
-                            <button type="submit" class="site-btn">SEARCH</button>
+                            <input id="search" type="search" placeholder="Search" value="">
+                            <button type="button" class="site-btn" onclick="doSearch2()">Search</button>
                         </form>
                     </div>
                     <div class="hero__search__phone">
@@ -158,21 +176,6 @@
 <!-- Hero Section End -->
 
 <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" data-setbg="/ogani-master/img/breadcrumb.jpg">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="breadcrumb__text">
-                    <h2>Checkout</h2>
-                    <div class="breadcrumb__option">
-                        <a href="./index.html">Home</a>
-                        <span>Checkout</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 <!-- Breadcrumb Section End -->
 </body>
 

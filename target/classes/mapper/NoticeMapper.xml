@@ -27,4 +27,17 @@
         WHERE NOTICE_SEQ = #{notice_seq}
     </select>
 
+    <delete id="noticeDelete" parameterType="String">
+        delete from NOTICE
+        where NOTICE_SEQ = #{nSeq}
+    </delete>
+
+    <update id="noticeUpdate" parameterType="NoticeDTO">
+        update NOTICE
+        set TITLE = #{title},
+            CONTENTS = #{contents}
+        where
+            NOTICE_SEQ = #{Notice_seq}
+    </update>
+
 </mapper>

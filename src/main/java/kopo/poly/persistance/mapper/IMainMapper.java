@@ -13,7 +13,8 @@ public interface IMainMapper {
     void InsertFood(FoodDTO fDTO)throws Exception;
 
     List<FoodDTO> getFoodList();
-    List<FoodDTO> foodsell_up();
 
+    int update(FoodDTO fDTO)throws Exception;
 
+    FoodDTO getFoodInfo(FoodDTO pDTO)throws Exception;
 }

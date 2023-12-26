@@ -1,5 +1,9 @@
+<%@ page import="kopo.poly.dto.MailDTO" %>
+<%@ page import="kopo.poly.util.CmmUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%
+    String email_user = (String) request.getAttribute("email_user");
+%>
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -51,7 +55,19 @@
             width: 160px;
             border-radius: 20px;
         }
-        .signup2.nice-select
+
+
+        .form {
+            position: relative;
+            z-index: 1;
+            background: #FFFFFF;
+            max-width: 700px;
+            margin: 0 auto 100px;
+            padding: 70px;
+            text-align: center;
+            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        }
+
 
 
     </style>
@@ -104,6 +120,28 @@
             }
 
         }
+
+
+        /** 비밀번호 일치확인 */
+        function pwdConfirm() {
+            /* 비밀번호, 비밀번호 확인 입력창에 입력된 값을 비교해서 같다면 비밀번호 일치, 그렇지 않으면 불일치 라는 텍스트 출력.*/
+            /* document : 현재 문서를 의미함. 작성되고 있는 문서를 뜻함. */
+            /* getElementByID('아이디') : 아이디에 적힌 값을 가진 id의 value를 get을 해서 password 변수 넣기 */
+            var pwd_user = document.getElementById('pwd_user');					//비밀번호
+            var pwd2_user = document.getElementById('pwd2_user');	//비밀번호 확인 값
+            // id로 받아옴
+            var msg = document.getElementById('pwdCheck');				//확인 메세지
+            var correctColor = "#00ff00";	//맞았을 때 출력되는 색깔.
+            var wrongColor ="#ff0000";	//틀렸을 때 출력되는 색깔
+
+            if(pwd_user.value == pwd2_user.value){//password 변수의 값과 passwordConfirm 변수의 값과 동일하다.
+                msg.style.color = correctColor;/* span 태그의 ID(confirmMsg) 사용  */
+                msg.innerHTML ="비밀번호 일치";/* innerHTML : HTML 내부에 추가적인 내용을 넣을 때 사용하는 것. */
+            }else{
+                msg.style.color = wrongColor;
+                msg.innerHTML ="비밀번호 불일치";
+            }
+        }
     </script>
 
 
@@ -139,7 +177,7 @@
             </ul>
         </div>
         <div class="header__top__right__auth">
-            <a href="/login/login"><i class="fa fa-user"></i> Login</a>
+            <a href="/login/login"><i class="fa fa-user"></i> Login </a>
         </div>
     </div>
     <nav class="humberger__menu__nav mobile-menu">
@@ -195,20 +233,26 @@
         </div>
 
         <!--            회원가입 양식 폼 집어넣기   -->
-        <div>
+        <div class="form">
             <div class="signup2">
                 <form name="f" method="post" action="/signup/insertUserInfo" onsubmit="return doRegUserCheck(this);">
-                    이메일, 패스워드, 닉네임, 성별, 나이, 비건여부, 비건종류 <br><%-- onfocus 클릭하면 바뀜 --%>
-                    <input type="email" name="email_user" placeholder="E-mail" onfocus="this.placeholder = ''" onblur="this.placeholder = 'E-Mail'" required><br><br>
-                    <input type="password" name="pwd_user" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" required><br><br>
-                    <input type="password" name="pwd2_user" placeholder="Confirm Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Confirm Password'" required><br><br>
+                     유저 회원가입하기<br><%-- onfocus 클릭하면 바뀜 --%>
+                    <input type="email" name="email_user" value="<%=email_user%>" readonly onfocus="this.placeholder = ''" onblur="this.placeholder = 'E-Mail'" required><br><br>
+
+                    <div><%-- 비밀번호 확인 --%>
+                        <input type="password" name="pwd_user" id="pwd_user" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" required><br>
+                        <input type="password" name="pwd2_user" id="pwd2_user" placeholder="Confirm Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Confirm Password'" onkeyup="pwdConfirm()" required>
+                        <p id="pwdCheck"></p>
+                    </div><br>
+
+
                     <input type="text" name="name_user" placeholder="Name"onfocus="this.placeholder = ''" onblur="this.placeholder = 'Name'" required><br><br>
                     <input type="radio" name="gender" value="man"> 남 &nbsp;&nbsp;&nbsp;
                     <input type="radio" name="gender" value="woman"> 여<br><br>
                     <input type="text" name="age_user" placeholder="Age"onfocus="this.placeholder = ''" onblur="this.placeholder = 'Age'" required> <br><br>
 
                     비건여부<br><br>
-                    <div style="padding-left: 44%;">
+                    <div style="padding-left: 37%;">
                         <select name="type_veganism">
                             <option value="noVegan"> 해당사항 없음 </option>
                             <option value="vegan"> 비건 Vegan </option>
@@ -221,7 +265,7 @@
                         </select>
                     </div>
 
-                    <br><br>
+                    <br><br><br>
                     <button type="submit" class="signupbutton"> 회원가입 </button>
 
                 </form>

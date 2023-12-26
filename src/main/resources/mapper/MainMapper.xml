@@ -15,20 +15,19 @@
 
     <select id="getFoodList" parameterType="FoodDTO" resultType="FoodDTO">
         SELECT * FROM food
+        where P_SELL >0
     </select>
-
-
-
-     <select id="foodsell_up" parameterType="FoodDTO" resultType="FoodDTO">
-        SELECT * FROM food
-    </select>
-
-
 
     <update id="Food_update" parameterType="FoodDTO">
         update food set  p_sell = #{p_sell}
 
     </update>
+
+    <select id="getFoodInfo" resultType="FoodDTO">
+        SELECT *
+        FROM FOOD
+        WHERE P_NUM = #{p_num}
+    </select>
 
 
 

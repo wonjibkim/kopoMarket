@@ -40,12 +40,28 @@ public class MainService implements IMainService {
                 return rList;
         }
 
+        @Transactional
         @Override
-        public List<FoodDTO> foodsell_up() {
+        public int update(FoodDTO fDTO) throws Exception {
 
-                List<FoodDTO>rList =mainMapper.getFoodList();
+                log.info(this.getClass().getName() + ".update Start!");
 
-                return rList;
+                int res = mainMapper.update(fDTO);
+
+                log.info(this.getClass().getName() + ".update end!");
+
+
+                return res;
+        }
+
+        @Transactional
+        @Override
+        public FoodDTO getFoodInfo(FoodDTO pDTO) throws Exception {
+
+                log.info(this.getClass().getName() + ".getFoodInfo start!");
+
+                return mainMapper.getFoodInfo(pDTO);
+
         }
 
 

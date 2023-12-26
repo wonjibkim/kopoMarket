@@ -8,7 +8,6 @@
         (
             EMAIL_USER,
             PWD_USER,
---             PWD2_USER,
             NAME_USER,
             GENDER,
             AGE_USER,
@@ -17,7 +16,6 @@
         VALUES (
                    #{email_user},
                    #{pwd_user},
---                    #{pwd2_user},
                    #{name_user},
                    #{gender},
                    #{age_user},
@@ -39,10 +37,44 @@
            WHERE 절을 안쓰면 테이블에는 항상 값이 있기떄문에 그냥 계속 안됨*/
     </select>
 
+
+
+    <!-- 로그인하기 위해 아이디와 비밀번호 일치하는지 확인 -->
     <select parameterType="UserInfoDTO" id="getUserLoginCheck" resultType="UserInfoDTO">
-        SELECT EMAIL_USER, PWD_USER FROM USERINFO
+        SELECT * FROM USERINFO
         WHERE EMAIL_USER  = #{email_user}
-        AND PWD_USER = #{pwd_user}
+          AND PWD_USER = #{pwd_user}
     </select>
+
+
+    <!-- 로그인하기 전 이메일 넣기 -->
+    <insert parameterType="MailDTO" id="insertMailCode">
+        INSERT INTO EmailCode
+        (
+            EMAIL_USER,
+            MAIL_CODE
+        )VALUES
+            (
+                #{toEmail},
+                #{mail_code}
+            )
+    </insert>
+
+
+    <!-- 로그인 인증시 코드비교하기위해 아이디랑 코드 비교 -->
+    <select id="mailCodeCheck" parameterType="String" resultType="String">
+        SELECT MAIL_CODE FROM EmailCode
+        WHERE EMAIL_USER = #{email}
+    </select>
+
+
+    <!--비밀번호 찾기 할 때 아이디와 회원아이디 값 비교-->
+
+
+
+    <!--비밀번호 찾기 할 때 비밀번호 변경 -->
+    <update id="newPwdUser" parameterType="UserInfoDTO" >
+        UPDATE USERINFO SET PWD_USER = #{pwd_user} WHERE EMAIL_USER = #{email_user}
+    </update>
 
 </mapper>

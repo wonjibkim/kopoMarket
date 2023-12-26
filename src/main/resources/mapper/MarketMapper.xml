@@ -2,7 +2,161 @@
 <!DOCTYPE mapper PUBLIC "=//mybatis.org//DTO Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kopo.poly.persistance.mapper.IMarketInfoMapper">
+<mapper namespace="kopo.poly.persistance.mapper.IMarketMapper">
+
+<!--    식자재등록-->
+    <insert id="FoodInsert" parameterType="FoodDTO">
+        INSERT INTO food
+        (P_NAME,P_PRICE,P_SELL,P_INFO,P_PERIOD,P_CATEGORY,P_ENROLL,P_FILEPATH,P_FILENAME,P_DISCOUNT,P_ANCESTRY,P_WEIGHT,MARKET_SEQ,P_BARCODE)
+        VALUES
+            (#{p_name},#{p_price},#{p_sell},#{p_info},#{p_period},#{p_category},SYSDATE(),#{p_filePath},#{p_fileName},#{p_discount},#{p_ancestry},#{p_weight},#{market_seq},#{p_barcode})
+    </insert>
+
+<!--식자재 전체리스트-->
+    <select id="FoodList" parameterType="FoodDTO" resultType="FoodDTO">
+        SELECT * FROM food where MARKET_SEQ=#{market_seq}
+    </select>
+
+    <select id="FoodEditInfo" resultType="FoodDTO">
+        SELECT P_NUM,P_NAME,P_PRICE,P_SELL,P_INFO,P_PERIOD,P_CATEGORY,P_ENROLL,P_FILEPATH,P_FILENAME,P_DISCOUNT,P_ANCESTRY,P_WEIGHT
+        FROM food
+        WHERE  P_NUM = #{p_num}
+    </select>
+
+        <update id="foodUp" parameterType="FoodDTO">
+            update food set  P_NAME =#{p_name},
+                             P_PRICE =#{p_price},
+                             P_SELL=#{p_sell},
+                             P_INFO=#{p_info},
+                             P_PERIOD=#{p_period},
+                             P_CATEGORY=#{p_category},
+                             P_FILEPATH=#{p_filePath},
+                             P_FILENAME=#{p_fileName},
+                             P_DISCOUNT=#{p_discount},
+                             P_ANCESTRY=#{p_ancestry},
+                             P_WEIGHT=#{p_weight}
+            WHERE  P_NUM = #{p_num}
+
+        </update>
+
+
+    <delete id="FoodDelete" parameterType="FoodDTO">
+        DELETE FROM food
+        WHERE P_NUM = #{p_num}
+
+    </delete>
+
+
+    <select id="FoodListShelf" resultType="FoodDTO" parameterType="FoodDTO">
+        SELECT * FROM food  WHERE DATE(P_PERIOD) <![CDATA[<]]> DATE(NOW()) and MARKET_SEQ=#{market_seq}
+    </select>
+
+
+    <delete id="FoodDeleteShelf" parameterType="FoodDTO" >
+        DELETE FROM food
+        WHERE DATE(P_PERIOD) <![CDATA[<]]> DATE(NOW()) AND MARKET_SEQ=#{market_seq}
+
+    </delete>
+
+
+    <select id="FoodListZero" resultType="FoodDTO" parameterType="FoodDTO">
+        SELECT * FROM food  WHERE P_SELL <![CDATA[<]]>  1 AND MARKET_SEQ=#{market_seq}
+    </select>
+
+
+
+
+
+    <delete id="Foodzerodel" parameterType="FoodDTO" >
+        DELETE FROM food
+        WHERE P_SELL <![CDATA[<]]>  1 AND MARKET_SEQ=#{market_seq}
+    </delete>
+
+
+
+
+<!--    여기서부터 마켓에 없음..-->
+
+    <select id="MartMap" resultType="MarketInfoDTO">
+        SELECT ADDR1_MARKET,NAME_MARKET FROM marketinfo
+    </select>
+
+
+    <delete id="marketapide">
+        DELETE  FROM MARKETPASING
+
+    </delete>
+
+
+    <insert id="maketInsertInfo" parameterType="MarketPasingDTO">
+        INSERT INTO MARKETPASING
+            (
+                REFINE_WGS84_LAT,REFINE_WGS84_LOGT,
+                BIZPLC_NM,LICENSG_DE,REFINE_ROADNM_ADDR
+            )
+        VALUES
+            (
+                #{refine_wgs84_lat}, #{refine_wgs84_logt},
+                #{bizplc_nm},#{licensg_de},#{refine_roadnm_addr}
+            )
+    </insert>
+
+
+    <select id="pasingMap" resultType="MarketPasingDTO">
+        SELECT    REFINE_WGS84_LAT,REFINE_WGS84_LOGT,
+                  BIZPLC_NM,REFINE_ROADNM_ADDR,LICENSG_DE
+        FROM MARKETPASING
+    </select>
+
+<!--    카트 품목이 있는지 확인하는 쿼리
+카트에 담아 있으면 1 아니면 0 -->
+    <select id="SelectCountInCart" resultType="cartDTO" parameterType="cartDTO">
+
+        SELECT
+            CASE
+                WHEN COUNT(1)
+                    THEN 'Y'
+                ELSE 'N'
+                END AS EXISTS_YN
+        FROM CART WHERE USER_SEQ=#{user_seq} AND FOOD_NUM=#{food_num}
+    </select>
+
+
+
+
+<!--    카트 추가 쿼리-->
+    <insert id="InsertFoodInCart" parameterType="cartDTO">
+
+    INSERT INTO CART
+        (
+
+         CART_COUNT,
+         CART_DATE,
+         USER_SEQ,
+         FOOD_NUM
+        )
+        VALUES (
+
+                #{cart_count},
+                SYSDATE(),
+                #{user_seq},
+                #{food_num}
+               )
+
+
+
+    </insert>
+
+
+<!--    바코드로 수량뺴기 쿼리-->
+    <update id="update_barcode" parameterType="FoodDTO">
+        UPDATE food set P_SELL = CAST(P_SELL as unsigned) -1
+        WHERE P_BARCODE=#{p_barcode}
+    </update>
+
+
+
+
 
 
 

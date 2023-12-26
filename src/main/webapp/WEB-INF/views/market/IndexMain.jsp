@@ -1,4 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="kopo.poly.dto.FoodDTO" %>
+<%@ page import="kopo.poly.dto.RecipeDTO" %>
+<%@ page import="kopo.poly.util.CmmUtil" %>
+<%
+    List<FoodDTO> rList = (List<FoodDTO>) request.getAttribute("rList");
+    List<RecipeDTO> nList = (List<RecipeDTO>) request.getAttribute("nList");
+
+    if (rList == null) {
+        rList = new ArrayList<FoodDTO>();
+
+    }
+    if (nList == null) {
+        nList = new ArrayList<RecipeDTO>();
+
+    }
+%>
 
 <!DOCTYPE html>
 <html lang="zxx">
@@ -58,10 +76,10 @@
                             </ul>
                         </div>
                         <div class="header__top__right__auth">
-                            <%if(session.getAttribute("SS_USER_ID") == null){%>
-                            <a href="/signup/login"><i class="fa fa-user"></i> Login</a>
+                            <%if((session.getAttribute("seq") == null) && (session.getAttribute("market_seq") == null)){%>
+                            <a href="/signup/SignupMain"><i class="fa fa-user"></i> Login</a>
                             <%}else{%>
-                            <a href="/signup/MyPage"><i class="fa fa-user"></i> Mypage</a>
+                            <a href="/login/MyPage"><i class="fa fa-user"></i> Mypage</a>
                             <%}%>
                         </div>
                     </div>
@@ -79,28 +97,41 @@
             <div class="col-lg-6">
                 <nav class="header__menu">
                     <ul>
-                        <li class="active"><a href="/ogani-master/index.html">Home</a></li>
-                        <li><a href="/ogani-master/shop-grid.html">Shop</a></li>
-                        <li><a href="#">Pages</a>
-                            <ul class="header__menu__dropdown">
-                                <li><a href="/ogani-master/shop-details.html">Shop Details</a></li>
-                                <li><a href="/ogani-master/shoping-cart.html">Shoping Cart</a></li>
-                                <li><a href="/ogani-master/checkout.html">Check Out</a></li>
-                                <li><a href="/ogani-master/blog-details.html">Blog Details</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="/ogani-master/blog.html">Blog</a></li>
-                        <li><a href="/ogani-master/contact.html">Contact</a></li>
+                        <li class="active"><a href="/market/index">Home</a></li>
+                        <li><a href="/market/ShopList">Shop</a></li>
+<%--                        <li><a href="#">Pages</a>--%>
+<%--                            <ul class="header__menu__dropdown">--%>
+<%--                                <li><a href="/ogani-master/shop-details.html">Shop Details</a></li>--%>
+<%--                                <li><a href="/ogani-master/shoping-cart.html">Shoping Cart</a></li>--%>
+<%--                                <li><a href="/ogani-master/checkout.html">Check Out</a></li>--%>
+<%--                                <li><a href="/ogani-master/blog-details.html">Blog Details</a></li>--%>
+<%--                            </ul>--%>
+<%--                        </li>--%>
+                        <li><a href="/notice/noticeboardlist">Service center</a></li>
+                        <li><a href="/map/MartMap">MartMap</a></li>
+                        <li><a href="/map/PasingMap">PasingMap</a></li>
+                        <li><a href="/price/list">Price List</a></li>
+                        <%if(session.getAttribute("seq") != null){%>
+                        <li><a href="/Cart/BarCodeCart">BarCodeCart</a></li>
+                        <li><a href="/Calendar/pu_full">pu_full</a></li>
+                        <%}%>
+                        <%if(session.getAttribute("market_seq") != null){%>
+                        <li><a href="/market/FoodList">Food List</a></li>
+                        <li><a href="/market/update_barcode">Update Barcode</a></li>
+                        <li><a href="/Calendar/sell_full">sell_full</a></li>
+                        <%}%>
+
                     </ul>
                 </nav>
             </div>
             <div class="col-lg-3">
                 <div class="header__cart">
                     <ul>
-                        <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                        <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                        <%if(session.getAttribute("seq") != null){%>
+                        <li><a href="/Cart/cartList"><i class="fa fa-shopping-bag"></i></a></li>
+                        <%}%>
                     </ul>
-                    <div class="header__cart__price">item: <span>$150.00</span></div>
+<%--                    <div class="header__cart__price">item: <span>$150.00</span></div>--%>
                 </div>
             </div>
         </div>
@@ -108,6 +139,15 @@
             <i class="fa fa-bars"></i>
         </div>
     </div>
+    <script>
+        function doDetail(seq) {
+            location.href = "/market/FoodDetail?nSeq=" + seq;
+        }
+        function doRecipeDetail(Recipe_name) {
+            print("실행됨");
+            location.href = "/market/RecipeDetail?Recipe_name=" + Recipe_name;
+        }
+    </script>
 </header>
 
 <!-- Hero Section Begin -->
@@ -121,30 +161,38 @@
                         <span>All departments</span>
                     </div>
                     <ul>
-                        <li><a href="#">Fresh Meat</a></li>
-                        <li><a href="#">Vegetables</a></li>
-                        <li><a href="#">Fruit & Nut Gifts</a></li>
-                        <li><a href="#">Fresh Berries</a></li>
-                        <li><a href="#">Ocean Foods</a></li>
-                        <li><a href="#">Butter & Eggs</a></li>
-                        <li><a href="#">Fastfood</a></li>
-                        <li><a href="#">Fresh Onion</a></li>
-                        <li><a href="#">Papayaya & Crisps</a></li>
-                        <li><a href="#">Oatmeal</a></li>
-                        <li><a href="#">Fresh Bananas</a></li>
+                        <li><a onclick="javascript:doSearch('Vegetables')">Vegetables</a></li>
+                        <li><a onclick="javascript:doSearch('Meat')">Meat</a></li>
+                        <li><a onclick="javascript:doSearch('Fruit')">Fruit</a></li>
+                        <li><a onclick="javascript:doSearch('Snack')">Snack</a></li>
+                        <li><a onclick="javascript:doSearch('Fish')">Fish</a></li>
+                        <li><a onclick="javascript:doSearch('Mushroom')">Mushroom</a></li>
+                        <li><a onclick="javascript:doSearch('Bread')">Bread</a></li>
                     </ul>
                 </div>
+                <script>
+                    function doSearch(keyword) {
+                        location.href = "/market/ShopList?keyword=" + keyword;
+                    }
+                </script>
             </div>
+            <script>
+                function doSearch2() {
+                    var keyword = document.getElementById("search").value;\
+                    console.log(keyword)
+                    location.href = "/market/ShopList?keyword=" + keyword;
+                }
+            </script>
             <div class="col-lg-9">
                 <div class="hero__search">
                     <div class="hero__search__form">
-                        <form action="#">
+                        <form action="">
                             <div class="hero__search__categories">
                                 All Categories
                                 <span class="arrow_carrot-down"></span>
                             </div>
-                            <input type="text" placeholder="What do yo u need?">
-                            <button type="submit" class="site-btn">SEARCH</button>
+                            <input id="search" type="search" placeholder="Search" value="">
+                            <button type="button" class="site-btn" onclick="doSearch2()">Search</button>
                         </form>
                     </div>
                     <div class="hero__search__phone">
@@ -162,7 +210,7 @@
                         <span>FRUIT FRESH</span>
                         <h2>Vegetable <br />100% Organic</h2>
                         <p>Free Pickup and Delivery Available</p>
-                        <a href="#" class="primary-btn">SHOP NOW</a>
+                        <a href="/market/ShopList" class="primary-btn">SHOP NOW</a>
                     </div>
                 </div>
             </div>
@@ -176,31 +224,22 @@
     <div class="container">
         <div class="row">
             <div class="categories__slider owl-carousel">
+                <%
+                    for (int i = 0; i < nList.size(); i++) {
+                        RecipeDTO nDTO = nList.get(i);
+
+                        if (nDTO == null) {
+                            nDTO = new RecipeDTO();
+                        }
+                %>
                 <div class="col-lg-3">
-                    <div class="categories__item set-bg" data-setbg="/ogani-master/img/categories/cat-1.jpg">
-                        <h5><a href="#">Fresh Fruit</a></h5>
+                    <div class="categories__item set-bg" data-setbg="<%=nDTO.getFilename()%>">
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="javascript:doRecipeDetail('<%=CmmUtil.nvl(nDTO.getRecipe_name())%>');"><%=nDTO.getRecipe_name()%></a></h6>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <div class="categories__item set-bg" data-setbg="/ogani-master/img/categories/cat-2.jpg">
-                        <h5><a href="#">Dried Fruit</a></h5>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="categories__item set-bg" data-setbg="/ogani-master/img/categories/cat-3.jpg">
-                        <h5><a href="#">Vegetables</a></h5>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="categories__item set-bg" data-setbg="/ogani-master/img/categories/cat-4.jpg">
-                        <h5><a href="#">drink fruits</a></h5>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="categories__item set-bg" data-setbg="/ogani-master/img/categories/cat-5.jpg">
-                        <h5><a href="#">drink fruits</a></h5>
-                    </div>
-                </div>
+                <%}%>
             </div>
         </div>
     </div>
@@ -218,18 +257,30 @@
                 <div class="featured__controls">
                     <ul>
                         <li class="active" data-filter="*">All</li>
-                        <li data-filter=".oranges">Oranges</li>
-                        <li data-filter=".fresh-meat">Fresh Meat</li>
-                        <li data-filter=".vegetables">Vegetables</li>
-                        <li data-filter=".fastfood">Fastfood</li>
+                        <li data-filter=".Vegetables">Vegetables</li>
+                        <li data-filter=".Meat">Meat</li>
+                        <li data-filter=".Fruit">Fruit</li>
+                        <li data-filter=".Snack">Snack</li>
+                        <li data-filter=".Fish">Fish</li>
+                        <li data-filter=".Mushroom">Mushroom</li>
+                        <li data-filter=".Bread">Bread</li>
                     </ul>
                 </div>
             </div>
         </div>
+
         <div class="row featured__filter">
-            <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
+            <%
+                for (int i = 0; i < rList.size(); i++) {
+                    FoodDTO rDTO = rList.get(i);
+
+                    if (rDTO == null) {
+                        rDTO = new FoodDTO();
+                    }
+            %>
+            <div class="col-lg-3 col-md-4 col-sm-6 mix <%=CmmUtil.nvl(rDTO.getP_category())%>">
                 <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="/ogani-master/img/featured/feature-1.jpg">
+                    <div class="featured__item__pic set-bg" data-setbg="<%=rDTO.getP_filePath()%>/<%=rDTO.getP_fileName()%>">
                         <ul class="featured__item__pic__hover">
                             <li><a href="#"><i class="fa fa-heart"></i></a></li>
                             <li><a href="#"><i class="fa fa-retweet"></i></a></li>
@@ -237,116 +288,12 @@
                         </ul>
                     </div>
                     <div class="featured__item__text">
-                        <h6><a href="#">Crab Pool Security</a></h6>
-                        <h5>$30.00</h5>
+                        <h6><a href="javascript:doDetail('<%=CmmUtil.nvl(rDTO.getP_num())%>');"><%=CmmUtil.nvl(rDTO.getP_name())%></a></h6>
+                        <h5><%=CmmUtil.nvl(rDTO.getP_price())%></h5>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mix vegetables fastfood">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="/ogani-master/img/featured/feature-2.jpg">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="#">Crab Pool Security</a></h6>
-                        <h5>$30.00</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mix vegetables fresh-meat">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="/ogani-master/img/featured/feature-3.jpg">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="#">Crab Pool Security</a></h6>
-                        <h5>$30.00</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mix fastfood oranges">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="/ogani-master/img/featured/feature-4.jpg">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="#">Crab Pool Security</a></h6>
-                        <h5>$30.00</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mix fresh-meat vegetables">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="/ogani-master/img/featured/feature-5.jpg">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="#">Crab Pool Security</a></h6>
-                        <h5>$30.00</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fastfood">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="/ogani-master/img/featured/feature-6.jpg">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="#">Crab Pool Security</a></h6>
-                        <h5>$30.00</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mix fresh-meat vegetables">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="/ogani-master/img/featured/feature-7.jpg">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="#">Crab Pool Security</a></h6>
-                        <h5>$30.00</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mix fastfood vegetables">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="/ogani-master/img/featured/feature-8.jpg">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="#">Crab Pool Security</a></h6>
-                        <h5>$30.00</h5>
-                    </div>
-                </div>
-            </div>
+            <%}%>
         </div>
     </div>
 </section>
@@ -371,269 +318,10 @@
 </div>
 <!-- Banner End -->
 
-<!-- Latest Product Section Begin -->
-<section class="latest-product spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4 col-md-6">
-                <div class="latest-product__text">
-                    <h4>Latest Products</h4>
-                    <div class="latest-product__slider owl-carousel">
-                        <div class="latest-prdouct__slider__item">
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-1.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-2.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-3.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="latest-prdouct__slider__item">
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-1.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-2.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-3.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="latest-product__text">
-                    <h4>Top Rated Products</h4>
-                    <div class="latest-product__slider owl-carousel">
-                        <div class="latest-prdouct__slider__item">
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-1.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-2.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-3.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="latest-prdouct__slider__item">
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-1.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-2.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-3.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="latest-product__text">
-                    <h4>Review Products</h4>
-                    <div class="latest-product__slider owl-carousel">
-                        <div class="latest-prdouct__slider__item">
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-1.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-2.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-3.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="latest-prdouct__slider__item">
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-1.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-2.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                            <a href="#" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="/ogani-master/img/latest-product/lp-3.jpg" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>Crab Pool Security</h6>
-                                    <span>$30.00</span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 <!-- Latest Product Section End -->
 
 <!-- Blog Section Begin -->
-<section class="from-blog spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="section-title from-blog__title">
-                    <h2>From The Blog</h2>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-6">
-                <div class="blog__item">
-                    <div class="blog__item__pic">
-                        <img src="/ogani-master/img/blog/blog-1.jpg" alt="">
-                    </div>
-                    <div class="blog__item__text">
-                        <ul>
-                            <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                            <li><i class="fa fa-comment-o"></i> 5</li>
-                        </ul>
-                        <h5><a href="#">Cooking tips make cooking simple</a></h5>
-                        <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam quaerat </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-6">
-                <div class="blog__item">
-                    <div class="blog__item__pic">
-                        <img src="/ogani-master/img/blog/blog-2.jpg" alt="">
-                    </div>
-                    <div class="blog__item__text">
-                        <ul>
-                            <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                            <li><i class="fa fa-comment-o"></i> 5</li>
-                        </ul>
-                        <h5><a href="#">6 ways to prepare breakfast for 30</a></h5>
-                        <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam quaerat </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-6">
-                <div class="blog__item">
-                    <div class="blog__item__pic">
-                        <img src="/ogani-master/img/blog/blog-3.jpg" alt="">
-                    </div>
-                    <div class="blog__item__text">
-                        <ul>
-                            <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                            <li><i class="fa fa-comment-o"></i> 5</li>
-                        </ul>
-                        <h5><a href="#">Visit the clean farm in the US</a></h5>
-                        <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam quaerat </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+
 <!-- Blog Section End -->
 
 <!-- Footer Section Begin -->

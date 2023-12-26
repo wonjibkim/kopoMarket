@@ -13,7 +13,6 @@ public class MarketInfoDTO {
     private String pwd_market;  //마켓비밀번호
     private String pwd2_market; //마켓비밀번호 확인
     private String name_market; //마트이름
-    private String name_boss;   //대표자 이름
     private String addr1_market;//마켓주소1
     private String addr2_market;//마켓주소2
     private String cnum_market; //마켓대표번
@@ -22,4 +21,8 @@ public class MarketInfoDTO {
      * DB를 조회해서 회원이 존재하면 Y값을 반환함
      * DB테이블에 존재하지 않는 가상의 칼럼 ALIAS */
     private String exists_yn;
+
+    private String b_no; //사업자등록번호
+    private String start_dt; // 개업날자
+    private String p_nm; //대표 이름
 }

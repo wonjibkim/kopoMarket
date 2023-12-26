@@ -82,7 +82,7 @@
             </ul>
         </div>
         <div class="header__top__right__auth">
-            <a href="#"><i class="fa fa-user"></i> Login</a>
+            <a href="/login/login"><i class="fa fa-user"></i> Login</a>
         </div>
     </div>
     <nav class="humberger__menu__nav mobile-menu">
@@ -129,16 +129,18 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="single-box1 text-center mb-4 mb-md-0">
-                        <h3>마트 등록하기 </h3>
+                        <h3>마트 유저 </h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                        <a href="SignupMarket" class="template-btn">Market signUp</a>
+                        <a href="/login/loginMarket" class="template-btn">Market Login</a>
+                        <a href="/signup/marketBnumCheck" class="template-btn">Market signUp</a>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="single-box2 text-center">
-                        <h3>일반 회원가입하기</h3>
+                        <h3>일반 회원 유저</h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                        <a href="SignupUser" class="template-btn">User SignUp</a>
+                        <a href="/login/loginUser" class="template-btn">User Login</a>
+                        <a href="/signup/UserMailCheck/" class="template-btn">User SignUp</a>
                     </div>
                 </div>
             </div>
